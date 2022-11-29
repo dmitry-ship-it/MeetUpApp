@@ -8,6 +8,8 @@ namespace MeetUpApp.Api.Data.DAL
 
         Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken);
 
+        Task<T?> GetByExpressionAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken);
+
         Task InsertAsync(T obj, CancellationToken cancellationToken);
 
         Task UpdateAsync(T obj, CancellationToken cancellationToken);
