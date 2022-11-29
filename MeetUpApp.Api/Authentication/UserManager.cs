@@ -11,9 +11,9 @@ namespace MeetUpApp.Api.Authentication
     {
         private readonly IConfigurationSection _config;
 
-        public UserManager(IConfigurationSection config)
+        public UserManager(IConfiguration config)
         {
-            _config = config;
+            _config = config.GetSection("AppSettings");
         }
 
         /// <summary>
