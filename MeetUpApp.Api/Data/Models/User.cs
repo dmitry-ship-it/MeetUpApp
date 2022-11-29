@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MeetUpApp.Api.Data.Models
@@ -6,6 +7,7 @@ namespace MeetUpApp.Api.Data.Models
     /// <summary>
     /// This model is used for auth.
     /// </summary>
+    [Index(nameof(Name), IsUnique = true)]
     public class User
     {
         [Key]
