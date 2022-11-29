@@ -1,3 +1,4 @@
+using MeetUpApp.Api.Authentication;
 using MeetUpApp.Api.Data;
 using MeetUpApp.Api.Data.DAL;
 using MeetUpApp.Api.Data.Models;
@@ -81,6 +82,19 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCookiePolicy();
+app.UseSession();
+app.Use(async (context, next) =>
+{
+    var token = context.Session.GetString("JWToken");
+    if (!string.IsNullOrEmpty(token))
+    {
+        context.Request.Headers.Add("Authorization", $"Bearer {token}");
+    }
+
+    await next();
+});
 
 app.UseAuthorization();
 
