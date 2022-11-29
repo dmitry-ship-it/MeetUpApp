@@ -19,6 +19,8 @@ namespace MeetUpApp.Api.Data.Models
         public DateTime DateTime { get; set; }
 
         [ForeignKey("AddressId")]
+        public int AddressId { get; set; }
+
         public virtual Address Address { get; set; } = null!;
     }
 }
