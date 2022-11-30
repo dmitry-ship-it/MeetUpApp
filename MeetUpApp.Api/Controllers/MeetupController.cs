@@ -4,6 +4,8 @@ using MeetUpApp.Api.Data.Models;
 using MeetUpApp.Api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Data.Common;
 
 namespace MeetUpApp.Api.Controllers
@@ -49,7 +51,8 @@ namespace MeetUpApp.Api.Controllers
             }
             catch (DbException)
             {
-                _logger.LogInformation("User '{Name}' tried to create ne meetup but failed.",
+                _logger.LogInformation(
+                    "User '{Name}' tried to create ne meetup but failed.",
                     HttpContext.User.Identity!.Name);
                 return BadRequest("Invalid meetup data.");
             }
@@ -90,9 +93,10 @@ namespace MeetUpApp.Api.Controllers
             {
                 await _meetupRepository.UpdateAsync(dbModel, cancellationToken);
             }
-            catch (DbException)
+            catch (Exception ex) when (ex is DbException or DbUpdateConcurrencyException)
             {
-                _logger.LogInformation("User '{Name}' tried to update meetup but this meetup was not found.",
+                _logger.LogInformation(
+                    "User '{Name}' tried to update meetup but this meetup was not found.",
                     HttpContext.User.Identity!.Name);
                 return BadRequest("This meetup was not found.");
             }

@@ -4,7 +4,6 @@ using MeetUpApp.Api.Data.DAL;
 using MeetUpApp.Api.Data.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Proxies;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 

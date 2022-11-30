@@ -10,8 +10,13 @@ namespace MeetUpApp.Api.ViewModels
         [Required]
         public string Name { get; set; } = null!;
 
+        [Required]
         public string Description { get; set; } = null!;
 
+        [Required]
+        public string Speaker { get; set; } = null!;
+
+        [Required]
         public DateTime DateTime { get; set; }
 
         public AddressViewModel Address { get; set; } = null!;

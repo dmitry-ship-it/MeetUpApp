@@ -6,6 +6,7 @@ namespace MeetUpApp.Api.Data.Models
     public class Meetup
     {
         [Key]
+        [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
@@ -16,6 +17,11 @@ namespace MeetUpApp.Api.Data.Models
         [Column(TypeName = "nvarchar(max)")]
         public string Description { get; set; } = null!;
 
+        [Required]
+        [Column(TypeName = "nvarchar(max)")]
+        public string Speaker { get; set; } = null!;
+
+        [Required]
         public DateTime DateTime { get; set; }
 
         [Required]
