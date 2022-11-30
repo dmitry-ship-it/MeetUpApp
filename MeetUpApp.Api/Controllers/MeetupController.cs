@@ -40,7 +40,8 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] MeetupViewModel meetup,
             CancellationToken cancellationToken)
         {
-            var dbModel = _mapper.Map<Meetup>(meetup);
+            var dbModel = _mapper.Map<MeetupViewModel, Meetup>(meetup);
+            _mapper.Map(meetup.Address, dbModel);
 
             try
             {
@@ -81,7 +82,8 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] MeetupViewModel meetup,
             CancellationToken cancellationToken)
         {
-            var dbModel = _mapper.Map<Meetup>(meetup);
+            var dbModel = _mapper.Map<MeetupViewModel, Meetup>(meetup);
+            _mapper.Map(meetup.Address, dbModel);
             dbModel.Id = id;
 
             try

@@ -4,6 +4,7 @@ using MeetUpApp.Api.Data.DAL;
 using MeetUpApp.Api.Data.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Proxies;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -11,8 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<AppDataContext>(options
-    => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDb")));
+builder.Services.AddDbContext<AppDataContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDb")));
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers();

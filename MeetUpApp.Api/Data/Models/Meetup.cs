@@ -18,9 +18,28 @@ namespace MeetUpApp.Api.Data.Models
 
         public DateTime DateTime { get; set; }
 
-        [ForeignKey("AddressId")]
-        public int AddressId { get; set; }
+        [Required]
+        [Column(TypeName = "nvarchar(max)")]
+        public string Сountry { get; set; } = null!;
 
-        public virtual Address Address { get; set; } = null!;
+        [Column(TypeName = "nvarchar(max)")]
+        public string State { get; set; } = null!;
+
+        [Required]
+        [Column(TypeName = "nvarchar(max)")]
+        public string City { get; set; } = null!;
+
+        [Required]
+        [Column(TypeName = "nvarchar(max)")]
+        public string Street { get; set; } = null!;
+
+        [Required]
+        [Column(TypeName = "nvarchar(100)")]
+        public string House { get; set; } = null!;
+
+        [StringLength(6, MinimumLength = 6)]
+        [Column(TypeName = "nchar(6)")]
+        public string PostCode { get; set; } = null!;
+
     }
 }

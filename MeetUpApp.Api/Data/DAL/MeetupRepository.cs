@@ -20,12 +20,14 @@ namespace MeetUpApp.Api.Data.DAL
 
         public async Task<Meetup?> GetByExpressionAsync(Expression<Func<Meetup, bool>> expression, CancellationToken cancellationToken = default)
         {
-            return await _context.Meetup.SingleOrDefaultAsync(expression, cancellationToken);
+            return await _context.Meetup
+                .SingleOrDefaultAsync(expression, cancellationToken);
         }
 
         public async Task<Meetup?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return await _context.Meetup.FindAsync(new object?[] { id }, cancellationToken: cancellationToken);
+            return await _context.Meetup.FindAsync(
+                new object[] { id }, cancellationToken);
         }
 
         public async Task InsertAsync(Meetup meetup, CancellationToken cancellationToken = default)
