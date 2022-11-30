@@ -1,6 +1,8 @@
-﻿namespace MeetUpApp.Api.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MeetUpApp.Api.ViewModels
 {
-    public class LoginViewModel
+    public class UserViewModel
     {
         public string Username { get; set; } = null!;
 

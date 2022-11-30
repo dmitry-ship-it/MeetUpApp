@@ -4,16 +4,16 @@ namespace MeetUpApp.Api.Data.DAL
 {
     public interface IRepository<T>
     {
-        Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
 
-        Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken);
+        Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
 
-        Task<T?> GetByExpressionAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken);
+        Task<T?> GetByExpressionAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default);
 
-        Task InsertAsync(T obj, CancellationToken cancellationToken);
+        Task InsertAsync(T obj, CancellationToken cancellationToken = default);
 
-        Task UpdateAsync(T obj, CancellationToken cancellationToken);
+        Task UpdateAsync(T obj, CancellationToken cancellationToken = default);
 
-        Task RemoveAsync(T obj, CancellationToken cancellationToken);
+        Task RemoveAsync(T obj, CancellationToken cancellationToken = default);
     }
 }

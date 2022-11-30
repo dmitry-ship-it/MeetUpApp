@@ -3,6 +3,7 @@ using MeetUpApp.Api.Data;
 using MeetUpApp.Api.Data.DAL;
 using MeetUpApp.Api.Data.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -29,7 +30,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(60);
-    options.Cookie.Name = ".App.Session";
+    options.Cookie.Name = "JWToken";
     options.Cookie.IsEssential = true;
 });
 builder.Services.AddAuthentication(auth =>
@@ -44,10 +45,10 @@ builder.Services.AddAuthentication(auth =>
     {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = true,
-        ValidIssuer = jwtConfigs["WebSiteDomain"]!,
-        ValidateAudience = true,
-        ValidAudience = jwtConfigs["WebSiteDomain"]!,
+        ValidateIssuer = false,
+        //ValidIssuer = jwtConfigs["WebSiteDomain"]!,
+        ValidateAudience = false,
+        //ValidAudience = jwtConfigs["WebSiteDomain"]!,
         RequireExpirationTime = true,
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero
@@ -74,6 +75,22 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// remove if at least one user is already exists
+#region Add first user
+
+using var services = app.Services.CreateScope();
+var db = services.ServiceProvider.GetRequiredService<AppDataContext>();
+if (!db.User.Any())
+{
+    var userManager = services.ServiceProvider.GetRequiredService<UserManager>();
+    var user = userManager.CreateUser("admin", "Qs3PGVAyyhUXtkRw");
+    
+    db.Add(user);
+    db.SaveChanges();
+}
+
+#endregion
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -96,8 +113,8 @@ app.Use(async (context, next) =>
     await next();
 });
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();

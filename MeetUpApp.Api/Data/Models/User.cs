@@ -15,7 +15,7 @@ namespace MeetUpApp.Api.Data.Models
         public Guid Id { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(max)")]
+        [Column(TypeName = "nvarchar(20)")]
         public string Name { get; set; } = null!;
 
         [Required]
