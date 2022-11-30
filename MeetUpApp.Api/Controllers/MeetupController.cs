@@ -1,10 +1,10 @@
-﻿using MeetUpApp.Api.Data.DAL;
+﻿using AutoMapper;
+using MeetUpApp.Api.Data.DAL;
 using MeetUpApp.Api.Data.Models;
 using MeetUpApp.Api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.Common;
-using System.Threading;
 
 namespace MeetUpApp.Api.Controllers
 {
@@ -13,13 +13,16 @@ namespace MeetUpApp.Api.Controllers
     public class MeetupController : Controller
     {
         private readonly IRepository<Meetup> _meetupRepository;
+        private readonly IMapper _mapper;
         private readonly ILogger<MeetupController> _logger;
 
         public MeetupController(
             IRepository<Meetup> meetupRepository,
+            IMapper mapper,
             ILogger<MeetupController> logger)
         {
             _meetupRepository = meetupRepository;
+            _mapper = mapper;
             _logger = logger;
         }
 
@@ -37,8 +40,7 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] MeetupViewModel meetup,
             CancellationToken cancellationToken)
         {
-            // TODO: replace with AutoMapper call
-            var dbModel = new Meetup();
+            var dbModel = _mapper.Map<Meetup>(meetup);
 
             try
             {
@@ -46,15 +48,20 @@ namespace MeetUpApp.Api.Controllers
             }
             catch (DbException)
             {
+                _logger.LogInformation("User '{Name}' tried to create ne meetup but failed.",
+                    HttpContext.User.Identity!.Name);
                 return BadRequest("Invalid meetup data.");
             }
+
+            _logger.LogInformation("User '{Name}' created a new meetup.",
+                HttpContext.User.Identity!.Name);
 
             return Accepted();
         }
 
         [HttpGet]
         public async Task<IActionResult> Select(
-            [FromRoute] int id,
+            [FromQuery] int id,
             CancellationToken cancellationToken)
         {
             var meetup = await _meetupRepository.GetByIdAsync(id, cancellationToken);
@@ -70,11 +77,12 @@ namespace MeetUpApp.Api.Controllers
         [Authorize]
         [HttpPatch(nameof(Update))]
         public async Task<IActionResult> Update(
+            [FromQuery] int id,
             [FromBody] MeetupViewModel meetup,
             CancellationToken cancellationToken)
         {
-            // TODO: replace with AutoMapper call
-            var dbModel = new Meetup();
+            var dbModel = _mapper.Map<Meetup>(meetup);
+            dbModel.Id = id;
 
             try
             {
@@ -82,8 +90,13 @@ namespace MeetUpApp.Api.Controllers
             }
             catch (DbException)
             {
+                _logger.LogInformation("User '{Name}' tried to update meetup but this meetup was not found.",
+                    HttpContext.User.Identity!.Name);
                 return BadRequest("This meetup was not found.");
             }
+
+            _logger.LogInformation("User '{Name}' updated meetup with id={Id}.",
+                HttpContext.User.Identity!.Name, id);
 
             return Accepted();
         }
@@ -91,20 +104,24 @@ namespace MeetUpApp.Api.Controllers
         [Authorize]
         [HttpDelete(nameof(Delete))]
         public async Task<IActionResult> Delete(
-            [FromBody] MeetupViewModel meetup,
+            [FromQuery] int id,
             CancellationToken cancellationToken)
         {
-            // TODO: replace with AutoMapper call
-            var dbModel = new Meetup();
+            var dbModel = await _meetupRepository.GetByIdAsync(id, cancellationToken);
 
-            try
+            if (dbModel is null)
             {
-                await _meetupRepository.RemoveAsync(dbModel, cancellationToken);
-            }
-            catch (DbException)
-            {
+                _logger.LogInformation(
+                    "User '{Name}' tried to delete meetup with id={Id} but this meetup doesn't exists.",
+                    HttpContext.User.Identity!.Name, id);
+
                 return BadRequest("This meetup was not found.");
             }
+
+            await _meetupRepository.RemoveAsync(dbModel, cancellationToken);
+
+            _logger.LogInformation("User '{Name}' has deleted meetup with id={Id}.",
+                HttpContext.User.Identity!.Name, id);
 
             return Accepted();
         }

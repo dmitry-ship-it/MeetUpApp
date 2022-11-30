@@ -3,7 +3,6 @@ using MeetUpApp.Api.Data;
 using MeetUpApp.Api.Data.DAL;
 using MeetUpApp.Api.Data.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -15,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDataContext>(options
     => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDb")));
 
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IRepository<Meetup>, MeetupRepository>();
