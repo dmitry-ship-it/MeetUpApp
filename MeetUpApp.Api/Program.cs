@@ -76,6 +76,7 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // remove if at least one user is already exists
+// !! use this only for testing 
 #region Add first user
 
 using var services = app.Services.CreateScope();
@@ -84,7 +85,7 @@ if (!db.User.Any())
 {
     var userManager = services.ServiceProvider.GetRequiredService<UserManager>();
     var user = userManager.CreateUser("admin", "Qs3PGVAyyhUXtkRw");
-    
+
     db.Add(user);
     db.SaveChanges();
 }

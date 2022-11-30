@@ -31,7 +31,7 @@ namespace MeetUpApp.Api.Data.Models
         [Column(TypeName = "nvarchar(100)")]
         public string House { get; set; } = null!;
 
-        [StringLength(6)]
+        [StringLength(6, MinimumLength = 6)]
         [Column(TypeName = "nchar(6)")]
         public string PostCode { get; set; } = null!;
 
