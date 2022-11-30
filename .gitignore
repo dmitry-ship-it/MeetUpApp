@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+MeetUpApp.Api/Migrations/*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
