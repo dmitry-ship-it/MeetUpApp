@@ -1,6 +1,4 @@
-﻿using MeetUpApp.Api.Authentication;
-using MeetUpApp.Api.Data.DAL;
-using MeetUpApp.Api.Data.Models;
+﻿using MeetUpApp.Api.Managers;
 using MeetUpApp.Api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,17 +10,14 @@ namespace MeetUpApp.Api.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        private readonly IRepository<User> userRepository;
-        private readonly UserManager userManager;
+        private readonly UserManager manager;
         private readonly ILogger<UserController> logger;
 
         public UserController(
-            IRepository<User> userRepository,
-            UserManager userManager,
+            UserManager manager,
             ILogger<UserController> logger)
         {
-            this.userRepository = userRepository;
-            this.userManager = userManager;
+            this.manager = manager;
             this.logger = logger;
         }
 
@@ -31,7 +26,7 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] UserViewModel viewModel,
             CancellationToken cancellationToken)
         {
-            var user = await userRepository.GetByExpressionAsync(
+            var user = await manager.GetAsync(
                 u => u.Name == viewModel.Username, cancellationToken);
 
             if (user is null)
@@ -43,7 +38,7 @@ namespace MeetUpApp.Api.Controllers
                 return NotFound($"User '{viewModel.Username}' not found.");
             }
 
-            if (!userManager.CheckCredentials(user, viewModel.Password))
+            if (!manager.CheckCredentials(user, viewModel.Password))
             {
                 logger.LogInformation(
                     "Attempted to log in as '{Name}' but password is invalid.",
@@ -53,7 +48,7 @@ namespace MeetUpApp.Api.Controllers
             }
 
             // give JWT token
-            userManager.CreateAuthenticationTicket(user, HttpContext.Session);
+            manager.CreateAuthenticationTicket(user, HttpContext.Session);
 
             logger.LogInformation(
                 "User '{Name}' successfully logged in.",
@@ -73,12 +68,12 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] UserViewModel viewModel,
             CancellationToken cancellationToken)
         {
-            var user = userManager.CreateUser(
-                viewModel.Username, viewModel.Password);
-
             try
             {
-                await userRepository.InsertAsync(user, cancellationToken);
+                await manager.AddUser(
+                    viewModel.Username,
+                    viewModel.Password,
+                    cancellationToken);
             }
             catch (DbException)
             {

@@ -1,7 +1,7 @@
-using MeetUpApp.Api.Authentication;
 using MeetUpApp.Api.Data;
 using MeetUpApp.Api.Data.DAL;
 using MeetUpApp.Api.Data.Models;
+using MeetUpApp.Api.Managers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -84,7 +84,7 @@ var db = services.ServiceProvider.GetRequiredService<AppDataContext>();
 if (!db.User.Any())
 {
     var userManager = services.ServiceProvider.GetRequiredService<UserManager>();
-    var user = userManager.CreateUser("admin", "Qs3PGVAyyhUXtkRw");
+    var user = userManager.AddUser("admin", "Qs3PGVAyyhUXtkRw");
 
     db.Add(user);
     db.SaveChanges();

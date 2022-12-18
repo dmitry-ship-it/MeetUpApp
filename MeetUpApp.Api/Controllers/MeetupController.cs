@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MeetUpApp.Api.Data.DAL;
 using MeetUpApp.Api.Data.Models;
+using MeetUpApp.Api.Managers;
 using MeetUpApp.Api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,16 +15,16 @@ namespace MeetUpApp.Api.Controllers
     [ApiController]
     public class MeetupController : Controller
     {
-        private readonly IRepository<Meetup> meetupRepository;
+        private readonly MeetupManager manager;
         private readonly IMapper mapper;
         private readonly ILogger<MeetupController> logger;
 
         public MeetupController(
-            IRepository<Meetup> meetupRepository,
+            MeetupManager manager,
             IMapper mapper,
             ILogger<MeetupController> logger)
         {
-            this.meetupRepository = meetupRepository;
+            this.manager = manager;
             this.mapper = mapper;
             this.logger = logger;
         }
@@ -32,7 +33,7 @@ namespace MeetUpApp.Api.Controllers
         public async Task<IActionResult> All(
             CancellationToken cancellationToken)
         {
-            return Ok(await meetupRepository.GetAllAsync(cancellationToken));
+            return Ok(await manager.GetAllAsync(cancellationToken));
         }
 
         [Authorize]
@@ -42,12 +43,9 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] MeetupViewModel meetup,
             CancellationToken cancellationToken)
         {
-            var dbModel = mapper.Map<MeetupViewModel, Meetup>(meetup);
-            mapper.Map(meetup.Address, dbModel);
-
             try
             {
-                await meetupRepository.InsertAsync(dbModel, cancellationToken);
+                await manager.AddAsync(meetup, cancellationToken);
             }
             catch (DbException)
             {
@@ -68,7 +66,7 @@ namespace MeetUpApp.Api.Controllers
             [FromQuery] int id,
             CancellationToken cancellationToken)
         {
-            var meetup = await meetupRepository.GetByIdAsync(id, cancellationToken);
+            var meetup = await manager.GetAsync(id, cancellationToken);
 
             if (meetup is null)
             {
@@ -85,13 +83,9 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] MeetupViewModel meetup,
             CancellationToken cancellationToken)
         {
-            var dbModel = mapper.Map<MeetupViewModel, Meetup>(meetup);
-            mapper.Map(meetup.Address, dbModel);
-            dbModel.Id = id;
-
             try
             {
-                await meetupRepository.UpdateAsync(dbModel, cancellationToken);
+                await manager.UpdateAsync(id, meetup, cancellationToken);
             }
             catch (Exception ex) when (ex is DbException or DbUpdateConcurrencyException)
             {
