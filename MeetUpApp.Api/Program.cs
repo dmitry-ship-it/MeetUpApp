@@ -20,6 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IRepository<Meetup>, MeetupRepository>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<UserManager>();
+builder.Services.AddScoped<MeetupManager>();
 
 #region JWT
 
