@@ -9,11 +9,11 @@ namespace MeetUpApp.Api.Authentication
 {
     public class UserManager
     {
-        private readonly IConfigurationSection _config;
+        private readonly IConfigurationSection config;
 
         public UserManager(IConfiguration config)
         {
-            _config = config.GetSection("AppSettings");
+            this.config = config.GetSection("AppSettings");
         }
 
         /// <summary>
@@ -26,10 +26,7 @@ namespace MeetUpApp.Api.Authentication
         public User CreateUser(string name, string password)
         {
             // generate random salt (256 bit)
-            var salt = new byte[32];
-
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(salt);
+            var salt = RandomNumberGenerator.GetBytes(32);
 
             // generate the salted and hashed password
             var saltedAndHashedPassword = SaltAndHashPassword(password, Convert.ToBase64String(salt));
@@ -50,10 +47,10 @@ namespace MeetUpApp.Api.Authentication
 
         public void CreateAuthenticationTicket(User user, ISession session)
         {
-            var key = Encoding.Default.GetBytes(_config["Token"]!);
+            var key = Encoding.Default.GetBytes(config["Token"]!);
             var JWToken = new JwtSecurityToken(
-                issuer: _config["ApiDomain"],
-                audience: _config["ApiDomain"],
+                issuer: config["ApiDomain"],
+                audience: config["ApiDomain"],
                 claims: GetUserClaims(user),
                 notBefore: new DateTimeOffset(DateTime.Now).DateTime,
                 expires: new DateTimeOffset(DateTime.Now.AddDays(1)).DateTime,
