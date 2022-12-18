@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using MeetUpApp.Api.Data.DAL;
-using MeetUpApp.Api.Data.Models;
 using MeetUpApp.Api.Managers;
 using MeetUpApp.Api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 using System.Data.Common;
 
 namespace MeetUpApp.Api.Controllers
@@ -107,18 +104,7 @@ namespace MeetUpApp.Api.Controllers
             [FromQuery] int id,
             CancellationToken cancellationToken)
         {
-            var dbModel = await meetupRepository.GetByIdAsync(id, cancellationToken);
-
-            if (dbModel is null)
-            {
-                logger.LogInformation(
-                    "User '{Name}' tried to delete meetup with id={Id} but this meetup doesn't exists.",
-                    HttpContext.User.Identity!.Name, id);
-
-                return BadRequest("This meetup was not found.");
-            }
-
-            await meetupRepository.RemoveAsync(dbModel, cancellationToken);
+            await manager.RemoveAsync(id, cancellationToken);
 
             logger.LogInformation("User '{Name}' has deleted meetup with id={Id}.",
                 HttpContext.User.Identity!.Name, id);

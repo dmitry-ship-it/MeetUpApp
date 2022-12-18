@@ -39,7 +39,7 @@ namespace MeetUpApp.Api.Managers
             var saltedAndHashedPassword = SaltAndHashPassword(
                 password, Convert.ToBase64String(salt));
 
-            repository.InsertAsync(new User()
+            await repository.InsertAsync(new User()
             {
                 Name = name,
                 PasswordHash = saltedAndHashedPassword,
