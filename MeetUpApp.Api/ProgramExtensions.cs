@@ -1,5 +1,5 @@
 ﻿using MeetUpApp.Data;
-using MeetUpApp.Api.Managers;
+using MeetUpApp.Managers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Data.Common;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
-using MeetUpApp.Api.ViewModels;
+using MeetUpApp.ViewModels;
 
 namespace MeetUpApp.Api
 {

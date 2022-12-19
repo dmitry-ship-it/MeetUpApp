@@ -1,5 +1,5 @@
-﻿using MeetUpApp.Api.Managers;
-using MeetUpApp.Api.ViewModels;
+﻿using MeetUpApp.Managers;
+using MeetUpApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MeetUpApp.Data\MeetUpApp.Data.csproj" />
+    <ProjectReference Include="..\MeetUpApp.Managers\MeetUpApp.Managers.csproj" />
   </ItemGroup>
 
 </Project>

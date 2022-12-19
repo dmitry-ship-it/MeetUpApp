@@ -2,7 +2,7 @@ using MeetUpApp.Api;
 using MeetUpApp.Data;
 using MeetUpApp.Data.DAL;
 using MeetUpApp.Data.Models;
-using MeetUpApp.Api.Managers;
+using MeetUpApp.Managers;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

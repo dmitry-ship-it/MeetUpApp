@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MeetUpApp.Data.Models;
 
-namespace MeetUpApp.Api.ViewModels.Mapping
+namespace MeetUpApp.ViewModels.Mapping
 {
     public class MeetupProfile : Profile
     {

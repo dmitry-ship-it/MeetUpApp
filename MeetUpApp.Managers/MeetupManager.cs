@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using MeetUpApp.Data.DAL;
 using MeetUpApp.Data.Models;
-using MeetUpApp.Api.ViewModels;
-using System.Data.Common;
-using Microsoft.EntityFrameworkCore;
+using MeetUpApp.ViewModels;
 
-namespace MeetUpApp.Api.Managers
+namespace MeetUpApp.Managers
 {
     public class MeetupManager
     {
@@ -31,14 +29,7 @@ namespace MeetUpApp.Api.Managers
             var dbModel = mapper.Map<MeetupViewModel, Meetup>(viewModel);
             mapper.Map(viewModel.Address, dbModel);
 
-            try
-            {
-                await repository.InsertAsync(dbModel, cancellationToken);
-            }
-            catch (DbException)
-            {
-                throw new ArgumentException("Invalid data", nameof(viewModel));
-            }
+            await repository.InsertAsync(dbModel, cancellationToken);
         }
 
         public async Task<Meetup> GetAsync(int id,

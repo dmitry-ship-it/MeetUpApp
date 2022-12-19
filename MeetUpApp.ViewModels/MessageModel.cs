@@ -1,4 +1,4 @@
-﻿namespace MeetUpApp.Api.ViewModels
+﻿namespace MeetUpApp.ViewModels
 {
     public class MessageModel
     {

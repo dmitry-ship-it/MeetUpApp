@@ -1,5 +1,7 @@
 ﻿using MeetUpApp.Data.DAL;
 using MeetUpApp.Data.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
@@ -7,7 +9,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace MeetUpApp.Api.Managers
+namespace MeetUpApp.Managers
 {
     public class UserManager
     {
@@ -52,8 +54,7 @@ namespace MeetUpApp.Api.Managers
             var saltedAndHashedPassword = SaltAndHashPassword(password, user.Salt);
             if (saltedAndHashedPassword != user.PasswordHash)
             {
-                throw new ArgumentException("Password is invalid",
-                    nameof(password));
+                throw new ArgumentException("Password is invalid");
             }
         }
 
@@ -83,8 +84,7 @@ namespace MeetUpApp.Api.Managers
 
             if (user is null)
             {
-                throw new ArgumentException("User was not found.",
-                    nameof(expression));
+                throw new ArgumentException("User was not found.");
             }
 
             return user;

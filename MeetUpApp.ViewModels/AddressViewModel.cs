@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MeetUpApp.Api.ViewModels
+namespace MeetUpApp.ViewModels
 {
     public class AddressViewModel
     {
