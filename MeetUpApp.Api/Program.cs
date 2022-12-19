@@ -85,10 +85,7 @@ var db = services.ServiceProvider.GetRequiredService<AppDataContext>();
 if (!db.User.Any())
 {
     var userManager = services.ServiceProvider.GetRequiredService<UserManager>();
-    var user = userManager.AddUser("admin", "Qs3PGVAyyhUXtkRw");
-
-    db.Add(user);
-    db.SaveChanges();
+    userManager.AddUser("admin", "Qs3PGVAyyhUXtkRw").Wait();
 }
 
 #endregion
