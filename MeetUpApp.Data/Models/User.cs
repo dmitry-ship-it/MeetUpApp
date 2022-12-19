@@ -7,11 +7,11 @@
     {
         public int Id { get; set; }
 
-        public string Name { get; set; } = null!;
+        public string Name { get; set; }
 
-        public string PasswordHash { get; set; } = null!;
+        public string PasswordHash { get; set; }
 
-        public string Salt { get; set; } = null!;
+        public string Salt { get; set; }
 
         // good place for role prop
     }

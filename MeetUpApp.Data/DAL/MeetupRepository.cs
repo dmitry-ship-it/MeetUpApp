@@ -20,7 +20,7 @@ namespace MeetUpApp.Data.DAL
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<Meetup?> GetByExpressionAsync(
+        public async Task<Meetup> GetByExpressionAsync(
             Expression<Func<Meetup, bool>> expression,
             CancellationToken cancellationToken = default)
         {

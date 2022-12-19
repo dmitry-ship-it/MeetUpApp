@@ -4,24 +4,24 @@
     {
         public int Id { get; set; }
 
-        public string Name { get; set; } = null!;
+        public string Name { get; set; }
 
-        public string Description { get; set; } = null!;
+        public string Description { get; set; }
 
-        public string Speaker { get; set; } = null!;
+        public string Speaker { get; set; }
 
         public DateTime DateTime { get; set; }
 
-        public string Сountry { get; set; } = null!;
+        public string Сountry { get; set; }
 
-        public string State { get; set; } = null!;
+        public string State { get; set; }
 
-        public string City { get; set; } = null!;
+        public string City { get; set; }
 
-        public string Street { get; set; } = null!;
+        public string Street { get; set; }
 
-        public string House { get; set; } = null!;
+        public string House { get; set; }
 
-        public string PostCode { get; set; } = null!;
+        public string PostCode { get; set; }
     }
 }

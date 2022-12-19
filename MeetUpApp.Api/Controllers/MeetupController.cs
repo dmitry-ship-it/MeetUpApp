@@ -34,6 +34,7 @@ namespace MeetUpApp.Api.Controllers
         }
 
         [Authorize]
+        // TODO: Replace Put with Post
         [HttpPut(nameof(Create))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Create(
