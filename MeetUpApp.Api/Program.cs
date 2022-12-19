@@ -1,7 +1,7 @@
 using MeetUpApp.Api;
-using MeetUpApp.Api.Data;
-using MeetUpApp.Api.Data.DAL;
-using MeetUpApp.Api.Data.Models;
+using MeetUpApp.Data;
+using MeetUpApp.Data.DAL;
+using MeetUpApp.Data.Models;
 using MeetUpApp.Api.Managers;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +24,8 @@ builder.Services.AddScoped<MeetupManager>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSessionForJwtBearer();
 builder.Services.AddAuthenticationForJwtBearer()
-    .AddPreconfiguredJwtBearer(builder.Configuration.GetSection("AuthSettings"));
+    .AddPreconfiguredJwtBearer(
+        builder.Configuration.GetSection("AuthSettings"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

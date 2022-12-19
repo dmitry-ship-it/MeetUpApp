@@ -1,5 +1,5 @@
-﻿using MeetUpApp.Api.Data.DAL;
-using MeetUpApp.Api.Data.Models;
+﻿using MeetUpApp.Data.DAL;
+using MeetUpApp.Data.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;

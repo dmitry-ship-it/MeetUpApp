@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MeetUpApp.Api.Data.Models;
+using MeetUpApp.Data.Models;
 
 namespace MeetUpApp.Api.ViewModels.Mapping
 {

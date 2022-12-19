@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using MeetUpApp.Api.Data.DAL;
-using MeetUpApp.Api.Data.Models;
+using MeetUpApp.Data.DAL;
+using MeetUpApp.Data.Models;
 using MeetUpApp.Api.ViewModels;
 
 namespace MeetUpApp.Api.Managers

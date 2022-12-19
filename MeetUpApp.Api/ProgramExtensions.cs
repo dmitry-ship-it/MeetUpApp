@@ -1,4 +1,4 @@
-﻿using MeetUpApp.Api.Data;
+﻿using MeetUpApp.Data;
 using MeetUpApp.Api.Managers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
