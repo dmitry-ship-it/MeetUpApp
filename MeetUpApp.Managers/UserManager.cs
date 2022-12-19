@@ -54,7 +54,7 @@ namespace MeetUpApp.Managers
             var saltedAndHashedPassword = SaltAndHashPassword(password, user.Salt);
             if (saltedAndHashedPassword != user.PasswordHash)
             {
-                throw new ArgumentException("Password is invalid");
+                throw new ArgumentException(ExceptionMessages.InvalidPassword);
             }
         }
 
@@ -84,7 +84,7 @@ namespace MeetUpApp.Managers
 
             if (user is null)
             {
-                throw new ArgumentException("User was not found.");
+                throw new ArgumentException(ExceptionMessages.UserNotFound);
             }
 
             return user;

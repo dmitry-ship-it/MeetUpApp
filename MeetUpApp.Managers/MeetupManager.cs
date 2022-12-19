@@ -40,7 +40,7 @@ namespace MeetUpApp.Managers
 
             if (meetup is null)
             {
-                throw new ArgumentException($"Meetup with id={id} was not found");
+                throw new ArgumentException(ExceptionMessages.MeetupNotFound);
             }
 
             return meetup;
