@@ -16,7 +16,7 @@ namespace MeetUpApp.Api.Managers
 
         public UserManager(IConfiguration config, IRepository<User> repository)
         {
-            this.config = config.GetSection("AppSettings");
+            this.config = config.GetSection("AuthSettings");
             this.repository = repository;
         }
 
