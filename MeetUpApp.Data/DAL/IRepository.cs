@@ -6,8 +6,6 @@ namespace MeetUpApp.Data.DAL
     {
         Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
 
-        Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-
         Task<T?> GetByExpressionAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default);
 
         Task InsertAsync(T obj, CancellationToken cancellationToken = default);

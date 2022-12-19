@@ -34,7 +34,8 @@ namespace MeetUpApp.Api.Managers
         public async Task<Meetup?> GetAsync(int id,
             CancellationToken cancellationToken = default)
         {
-            return await repository.GetByIdAsync(id, cancellationToken);
+            return await repository.GetByExpressionAsync(
+                m => m.Id == id, cancellationToken);
         }
 
         public async Task UpdateAsync(
