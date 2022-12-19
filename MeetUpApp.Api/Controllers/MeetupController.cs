@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using MeetUpApp.Api.Managers;
+﻿using MeetUpApp.Api.Managers;
 using MeetUpApp.Api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Data.Common;
 
 namespace MeetUpApp.Api.Controllers
 {
@@ -13,16 +10,13 @@ namespace MeetUpApp.Api.Controllers
     public class MeetupController : Controller
     {
         private readonly MeetupManager manager;
-        private readonly IMapper mapper;
         private readonly ILogger<MeetupController> logger;
 
         public MeetupController(
             MeetupManager manager,
-            IMapper mapper,
             ILogger<MeetupController> logger)
         {
             this.manager = manager;
-            this.mapper = mapper;
             this.logger = logger;
         }
 
@@ -34,24 +28,16 @@ namespace MeetUpApp.Api.Controllers
         }
 
         [Authorize]
-        // TODO: Replace Put with Post
-        [HttpPut(nameof(Create))]
+        [HttpPost(nameof(Create))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Create(
             [FromBody] MeetupViewModel meetup,
             CancellationToken cancellationToken)
         {
-            try
-            {
-                await manager.AddAsync(meetup, cancellationToken);
-            }
-            catch (DbException)
-            {
-                logger.LogInformation(
-                    "User '{Name}' tried to create ne meetup but failed.",
-                    HttpContext.User.Identity!.Name);
-                return BadRequest("Invalid meetup data.");
-            }
+            await manager.AddAsync(meetup, cancellationToken);
+            //logger.LogInformation(
+            //    "User '{Name}' tried to create the meetup but failed.",
+            //    HttpContext.User.Identity!.Name);
 
             logger.LogInformation("User '{Name}' created a new meetup.",
                 HttpContext.User.Identity!.Name);
@@ -66,10 +52,7 @@ namespace MeetUpApp.Api.Controllers
         {
             var meetup = await manager.GetAsync(id, cancellationToken);
 
-            if (meetup is null)
-            {
-                return BadRequest($"Meetup with id={id} was not found");
-            }
+            // return BadRequest($"Meetup with id={id} was not found");
 
             return Ok(meetup);
         }
@@ -81,17 +64,12 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] MeetupViewModel meetup,
             CancellationToken cancellationToken)
         {
-            try
-            {
-                await manager.UpdateAsync(id, meetup, cancellationToken);
-            }
-            catch (Exception ex) when (ex is DbException or DbUpdateConcurrencyException)
-            {
-                logger.LogInformation(
-                    "User '{Name}' tried to update meetup but this meetup was not found.",
-                    HttpContext.User.Identity!.Name);
-                return BadRequest("This meetup was not found.");
-            }
+            await manager.UpdateAsync(id, meetup, cancellationToken);
+
+            //logger.LogInformation(
+            //    "User '{Name}' tried to update meetup but this meetup was not found.",
+            //    HttpContext.User.Identity!.Name);
+            //return BadRequest("This meetup was not found.");
 
             logger.LogInformation("User '{Name}' updated meetup with id={Id}.",
                 HttpContext.User.Identity!.Name, id);

@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Data.Common;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
+using MeetUpApp.Api.ViewModels;
 
 namespace MeetUpApp.Api
 {
@@ -91,6 +95,53 @@ namespace MeetUpApp.Api
                 }
 
                 await next();
+            });
+        }
+
+        public static IApplicationBuilder UseCustomExceptionHandler(this IApplicationBuilder app)
+        {
+            return app.Use(async (context, next) =>
+            {
+                try
+                {
+                    await next();
+                }
+                catch (ArgumentException ex)
+                {
+                    await context.WriteExceptionMessage(
+                        StatusCodes.Status400BadRequest,
+                        ex.Message);
+                }
+                catch (DbUpdateException ex)
+                {
+                    await context.WriteExceptionMessage(
+                        StatusCodes.Status500InternalServerError,
+                        ex.Message);
+                }
+                catch (DbException ex)
+                {
+                    await context.WriteExceptionMessage(
+                        StatusCodes.Status500InternalServerError,
+                        ex.Message);
+                }
+                catch (Exception)
+                {
+                    await context.WriteExceptionMessage(
+                        StatusCodes.Status500InternalServerError,
+                        "Internal server error");
+                }
+            });
+        }
+
+        private static async Task WriteExceptionMessage(
+            this HttpContext httpContext,
+            int statusCode,
+            string message)
+        {
+            httpContext.Response.StatusCode = statusCode;
+            await httpContext.Response.WriteAsJsonAsync(new MessageModel
+            {
+                Message = message
             });
         }
     }

@@ -32,6 +32,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseCustomExceptionHandler();
+
 // remove if at least one user is already exists
 // !! use this only for testing 
 app.Services.TryAddFirstUser();

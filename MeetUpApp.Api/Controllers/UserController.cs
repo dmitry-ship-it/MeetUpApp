@@ -2,7 +2,6 @@
 using MeetUpApp.Api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.Common;
 
 namespace MeetUpApp.Api.Controllers
 {
@@ -29,23 +28,16 @@ namespace MeetUpApp.Api.Controllers
             var user = await manager.GetAsync(
                 u => u.Name == viewModel.Username, cancellationToken);
 
-            if (user is null)
-            {
-                logger.LogInformation(
-                    "Attempted to log in as '{Name}' but this user was not found.",
-                    viewModel.Username);
+            //logger.LogInformation(
+            //    "Attempted to log in as '{Name}' but this user was not found.",
+            //    viewModel.Username);
 
-                return NotFound($"User '{viewModel.Username}' not found.");
-            }
+            manager.CheckCredentials(user, viewModel.Password);
+            //logger.LogInformation(
+            //    "Attempted to log in as '{Name}' but password is invalid.",
+            //    viewModel.Username);
 
-            if (!manager.CheckCredentials(user, viewModel.Password))
-            {
-                logger.LogInformation(
-                    "Attempted to log in as '{Name}' but password is invalid.",
-                    viewModel.Username);
-
-                return BadRequest("Username or password is invalid.");
-            }
+            //return BadRequest("Username or password is invalid.");
 
             // give JWT token
             manager.CreateAuthenticationTicket(user, HttpContext.Session);
@@ -68,21 +60,15 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] UserViewModel viewModel,
             CancellationToken cancellationToken)
         {
-            try
-            {
-                await manager.AddUser(
-                    viewModel.Username,
-                    viewModel.Password,
-                    cancellationToken);
-            }
-            catch (DbException)
-            {
-                logger.LogWarning(
-                    "Can't create new user '{Name}' (DB error).",
-                    viewModel.Username);
+            await manager.AddUser(
+                viewModel.Username,
+                viewModel.Password,
+                cancellationToken);
+            //logger.LogWarning(
+            //    "Can't create new user '{Name}' (DB error).",
+            //    viewModel.Username);
 
-                return BadRequest("Can't create new user with this username.");
-            }
+            //return BadRequest("Can't create new user with this username.");
 
             logger.LogInformation(
                 "User '{Name}' successfully created.",
@@ -95,11 +81,11 @@ namespace MeetUpApp.Api.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Logout()
         {
-            if (HttpContext.User?.Identity is not null)
-            {
-                logger.LogInformation("User '{Name}' logged out",
-                    HttpContext.User!.Identity.Name);
-            }
+            //if (HttpContext.User?.Identity is not null)
+            //{
+            //    logger.LogInformation("User '{Name}' logged out",
+            //        HttpContext.User!.Identity.Name);
+            //}
 
             HttpContext.Session.Clear();
             return Ok("Logged out.");

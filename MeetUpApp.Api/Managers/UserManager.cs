@@ -47,10 +47,14 @@ namespace MeetUpApp.Api.Managers
             }, cancellationToken);
         }
 
-        public bool CheckCredentials(User user, string password)
+        public void CheckCredentials(User user, string password)
         {
             var saltedAndHashedPassword = SaltAndHashPassword(password, user.Salt);
-            return saltedAndHashedPassword == user.PasswordHash;
+            if (saltedAndHashedPassword != user.PasswordHash)
+            {
+                throw new ArgumentException("Password is invalid",
+                    nameof(password));
+            }
         }
 
         public void CreateAuthenticationTicket(User user, ISession session)
@@ -63,17 +67,27 @@ namespace MeetUpApp.Api.Managers
                 notBefore: new DateTimeOffset(DateTime.Now).DateTime,
                 expires: new DateTimeOffset(DateTime.Now.AddDays(1)).DateTime,
                 signingCredentials: new SigningCredentials(
-                    new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature));
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature));
 
             var token = new JwtSecurityTokenHandler().WriteToken(JWToken);
             session.SetString("JWToken", token);
         }
 
-        public async Task<User?> GetAsync(
+        public async Task<User> GetAsync(
             Expression<Func<User, bool>> expression,
             CancellationToken cancellationToken = default)
         {
-            return await repository.GetByExpressionAsync(expression, cancellationToken);
+            var user = await repository.GetByExpressionAsync(
+                expression, cancellationToken);
+
+            if (user is null)
+            {
+                throw new ArgumentException("User was not found.",
+                    nameof(expression));
+            }
+
+            return user;
         }
 
         private static IEnumerable<Claim> GetUserClaims(User user)

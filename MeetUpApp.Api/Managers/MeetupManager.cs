@@ -2,6 +2,8 @@
 using MeetUpApp.Data.DAL;
 using MeetUpApp.Data.Models;
 using MeetUpApp.Api.ViewModels;
+using System.Data.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeetUpApp.Api.Managers
 {
@@ -28,14 +30,29 @@ namespace MeetUpApp.Api.Managers
         {
             var dbModel = mapper.Map<MeetupViewModel, Meetup>(viewModel);
             mapper.Map(viewModel.Address, dbModel);
-            await repository.InsertAsync(dbModel, cancellationToken);
+
+            try
+            {
+                await repository.InsertAsync(dbModel, cancellationToken);
+            }
+            catch (DbException)
+            {
+                throw new ArgumentException("Invalid data", nameof(viewModel));
+            }
         }
 
-        public async Task<Meetup?> GetAsync(int id,
+        public async Task<Meetup> GetAsync(int id,
             CancellationToken cancellationToken = default)
         {
-            return await repository.GetByExpressionAsync(
+            var meetup = await repository.GetByExpressionAsync(
                 m => m.Id == id, cancellationToken);
+
+            if (meetup is null)
+            {
+                throw new ArgumentException($"Meetup with id={id} was not found");
+            }
+
+            return meetup;
         }
 
         public async Task UpdateAsync(
@@ -45,7 +62,12 @@ namespace MeetUpApp.Api.Managers
         {
             var dbModel = mapper.Map<MeetupViewModel, Meetup>(viewModel);
             mapper.Map(viewModel.Address, dbModel);
-            dbModel.Id = id;
+            mapper.Map(id, dbModel);
+
+            // check if meetup with this id exists
+            // without this check EF throws DbUpdateConcurrencyException
+            // which can't be caught
+            await GetAsync(id, cancellationToken);
 
             await repository.UpdateAsync(dbModel, cancellationToken);
         }

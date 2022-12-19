@@ -9,6 +9,7 @@ namespace MeetUpApp.Api.ViewModels.Mapping
         {
             CreateMap<MeetupViewModel, Meetup>();
             CreateMap<AddressViewModel, Meetup>();
+            CreateMap<int, Meetup>();
         }
     }
 }
