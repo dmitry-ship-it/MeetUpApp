@@ -63,28 +63,28 @@ dotnet build
 dotnet tool install --global dotnet-ef
 ```
 
-5. Move inside project folder
+5. Move inside data project folder
 
 ```sh
-cd MeetUpApp.Api
+cd MeetUpApp.Data
 ```
 
-6. Add new migration:
+6. Create database
 
 ```sh
-dotnet ef migrations add InitialCreate
+dotnet ef --startup-project ../MeetUpApp.Api/MeetUpApp.Api.csproj database update
 ```
 
-7. Apply migration
+7. Move to api folder
 
 ```sh
-dotnet ef database update
+cd ../MeetUpApp.Api
 ```
 
 8. Start the application
 
 ```sh
-dotnet run
+dotnet run -c Release
 ```
 
 Now you can navigate to https://localhost:7196/swagger and test it.

@@ -1,10 +1,8 @@
-﻿using MeetUpApp.Api.Authentication;
-using MeetUpApp.Api.Data.DAL;
-using MeetUpApp.Api.Data.Models;
-using MeetUpApp.Api.ViewModels;
+﻿using MeetUpApp.Managers;
+using MeetUpApp.Resources;
+using MeetUpApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.Common;
 
 namespace MeetUpApp.Api.Controllers
 {
@@ -12,18 +10,11 @@ namespace MeetUpApp.Api.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        private readonly IRepository<User> _userRepository;
-        private readonly UserManager _userManager;
-        private readonly ILogger<UserController> _logger;
+        private readonly UserManager manager;
 
-        public UserController(
-            IRepository<User> userRepository,
-            UserManager userManager,
-            ILogger<UserController> logger)
+        public UserController(UserManager manager)
         {
-            _userRepository = userRepository;
-            _userManager = userManager;
-            _logger = logger;
+            this.manager = manager;
         }
 
         [HttpPost(nameof(Login))]
@@ -31,35 +22,16 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] UserViewModel viewModel,
             CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByExpressionAsync(
-                u => u.Name == viewModel.Username, cancellationToken);
-
-            if (user is null)
-            {
-                _logger.LogInformation(
-                    "Attempted to log in as '{Name}' but this user was not found.",
-                    viewModel.Username);
-
-                return NotFound($"User '{viewModel.Username}' not found.");
-            }
-
-            if (!_userManager.CheckCredentials(user, viewModel.Password))
-            {
-                _logger.LogInformation(
-                    "Attempted to log in as '{Name}' but password is invalid.",
-                    viewModel.Username);
-
-                return BadRequest("Username or password is invalid.");
-            }
+            var user = await manager.CheckCredentials(viewModel,
+                viewModel.Password, cancellationToken);
 
             // give JWT token
-            _userManager.CreateAuthenticationTicket(user, HttpContext.Session);
+            manager.CreateAuthenticationTicket(user, HttpContext.Session);
 
-            _logger.LogInformation(
-                "User '{Name}' successfully logged in.",
-                    viewModel.Username);
-
-            return Ok("You have successfully logged in.");
+            return Ok(new MessageModel
+            {
+                Message = ResponseMessages.LoggedIn
+            });
         }
 
         /// <summary>
@@ -73,41 +45,26 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] UserViewModel viewModel,
             CancellationToken cancellationToken)
         {
-            var user = _userManager.CreateUser(
-                viewModel.Username, viewModel.Password);
+            await manager.AddUser(
+                viewModel.Username,
+                viewModel.Password,
+                cancellationToken);
 
-            try
+            return Ok(new MessageModel
             {
-                await _userRepository.InsertAsync(user, cancellationToken);
-            }
-            catch (DbException)
-            {
-                _logger.LogWarning(
-                    "Can't create new user '{Name}' (DB error).",
-                    viewModel.Username);
-
-                return BadRequest("Can't create new user with this username.");
-            }
-
-            _logger.LogInformation(
-                "User '{Name}' successfully created.",
-                    viewModel.Username);
-
-            return Ok("You have successfully registered.");
+                Message = ResponseMessages.Registered
+            });
         }
 
         [HttpGet(nameof(Logout))]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Logout()
         {
-            if (HttpContext.User?.Identity is not null)
-            {
-                _logger.LogInformation("User '{Name}' logged out",
-                    HttpContext.User!.Identity.Name);
-            }
-
             HttpContext.Session.Clear();
-            return Ok("Logged out.");
+            return Ok(new MessageModel
+            {
+                Message = ResponseMessages.LoggedOut
+            });
         }
     }
 }

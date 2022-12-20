@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using MeetUpApp.Api.Data.Models;
+using MeetUpApp.Data.Models;
 
-namespace MeetUpApp.Api.ViewModels.Mapping
+namespace MeetUpApp.ViewModels.Mapping
 {
     public class MeetupProfile : Profile
     {
@@ -9,6 +9,7 @@ namespace MeetUpApp.Api.ViewModels.Mapping
         {
             CreateMap<MeetupViewModel, Meetup>();
             CreateMap<AddressViewModel, Meetup>();
+            CreateMap<int, Meetup>();
         }
     }
 }
