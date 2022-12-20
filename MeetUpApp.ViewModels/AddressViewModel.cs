@@ -5,20 +5,20 @@ namespace MeetUpApp.ViewModels
     public class AddressViewModel
     {
         [Required]
-        public string Сountry { get; set; } = null!;
+        public string Сountry { get; set; }
 
-        public string State { get; set; } = null!;
-
-        [Required]
-        public string City { get; set; } = null!;
+        public string State { get; set; }
 
         [Required]
-        public string Street { get; set; } = null!;
+        public string City { get; set; }
 
         [Required]
-        public string House { get; set; } = null!;
+        public string Street { get; set; }
+
+        [Required]
+        public string House { get; set; }
 
         [StringLength(6, MinimumLength = 6)]
-        public string PostCode { get; set; } = null!;
+        public string PostCode { get; set; }
     }
 }

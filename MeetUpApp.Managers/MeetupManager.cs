@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MeetUpApp.Data.DAL;
 using MeetUpApp.Data.Models;
+using MeetUpApp.Resources;
 using MeetUpApp.ViewModels;
 
 namespace MeetUpApp.Managers

@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MeetUpApp.Data\MeetUpApp.Data.csproj" />
+    <ProjectReference Include="..\MeetUpApp.Resources\MeetUpApp.Resources.csproj" />
     <ProjectReference Include="..\MeetUpApp.ViewModels\MeetUpApp.ViewModels.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
 ﻿using MeetUpApp.Managers;
+using MeetUpApp.Resources;
 using MeetUpApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,16 +22,16 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] UserViewModel viewModel,
             CancellationToken cancellationToken)
         {
-            // TODO: Move to manager
-            var user = await manager.GetAsync(
-                u => u.Name == viewModel.Username, cancellationToken);
-
-            manager.CheckCredentials(user, viewModel.Password);
+            var user = await manager.CheckCredentials(viewModel,
+                viewModel.Password, cancellationToken);
 
             // give JWT token
             manager.CreateAuthenticationTicket(user, HttpContext.Session);
 
-            return Ok("You have successfully logged in.");
+            return Ok(new MessageModel
+            {
+                Message = ResponseMessages.LoggedIn
+            });
         }
 
         /// <summary>
@@ -49,8 +50,10 @@ namespace MeetUpApp.Api.Controllers
                 viewModel.Password,
                 cancellationToken);
 
-            // TODO: Move messgate to Constants
-            return Ok("You have successfully registered.");
+            return Ok(new MessageModel
+            {
+                Message = ResponseMessages.Registered
+            });
         }
 
         [HttpGet(nameof(Logout))]
@@ -58,7 +61,10 @@ namespace MeetUpApp.Api.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-            return Ok("Logged out.");
+            return Ok(new MessageModel
+            {
+                Message = ResponseMessages.LoggedOut
+            });
         }
     }
 }

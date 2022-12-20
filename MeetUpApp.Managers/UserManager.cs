@@ -1,5 +1,7 @@
 ﻿using MeetUpApp.Data.DAL;
 using MeetUpApp.Data.Models;
+using MeetUpApp.Resources;
+using MeetUpApp.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -49,13 +51,22 @@ namespace MeetUpApp.Managers
             }, cancellationToken);
         }
 
-        public void CheckCredentials(User user, string password)
+        public async Task<User> CheckCredentials(
+            UserViewModel viewModel,
+            string password,
+            CancellationToken cancellationToken = default)
         {
+            var user = await GetAsync(
+                u => u.Name == viewModel.Username,
+                cancellationToken);
+
             var saltedAndHashedPassword = SaltAndHashPassword(password, user.Salt);
             if (saltedAndHashedPassword != user.PasswordHash)
             {
                 throw new ArgumentException(ExceptionMessages.InvalidPassword);
             }
+
+            return user;
         }
 
         public void CreateAuthenticationTicket(User user, ISession session)

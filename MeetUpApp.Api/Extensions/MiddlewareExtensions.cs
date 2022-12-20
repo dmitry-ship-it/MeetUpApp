@@ -1,13 +1,14 @@
 ﻿using MeetUpApp.Data;
 using MeetUpApp.Managers;
+using MeetUpApp.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.Data.Common;
-using System.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Data;
+using System.Data.Common;
+using System.Text;
 
 namespace MeetUpApp.Api.CustomMiddlewares
 {
@@ -17,12 +18,8 @@ namespace MeetUpApp.Api.CustomMiddlewares
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                //.MinimumLevel.Override("System", LogEventLevel.Warning)
-                //.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                //.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                //.WriteTo.Seq()
                 .CreateLogger();
 
             return builder.UseSerilog(Log.Logger);
@@ -114,7 +111,7 @@ namespace MeetUpApp.Api.CustomMiddlewares
             });
         }
 
-        public static IApplicationBuilder AddPreconfiguredExceptionHandler(
+        public static IApplicationBuilder UsePreconfiguredExceptionHandler(
             this IApplicationBuilder builder)
         {
             return builder.Use(async (context, next) =>
@@ -140,7 +137,7 @@ namespace MeetUpApp.Api.CustomMiddlewares
                     ? StatusCodes.Status400BadRequest
                     : StatusCodes.Status500InternalServerError;
 
-            await respose.WriteAsJsonAsync(new
+            await respose.WriteAsJsonAsync(new MessageModel
             {
                 Message = GetErrorMessage(ex)
             });

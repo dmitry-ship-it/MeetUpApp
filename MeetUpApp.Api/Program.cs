@@ -3,6 +3,7 @@ using MeetUpApp.Data;
 using MeetUpApp.Data.DAL;
 using MeetUpApp.Data.Models;
 using MeetUpApp.Managers;
+using MeetUpApp.ViewModels.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -12,9 +13,12 @@ builder.Host.UsePreconfiguredSerilog();
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDb")));
+    options.UseSqlServer(builder.Configuration
+        .GetConnectionString("DefaultDb")));
 
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(
+    typeof(Program), typeof(MeetupProfile));
+
 builder.Services.AddControllers();
 
 // DI
@@ -34,11 +38,10 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseExceptionHandler();
-// app.UseCustomExceptionHandler();
+app.UsePreconfiguredExceptionHandler();
 
 // remove if at least one user is already exists
-// !! use this only for testing 
+// !! use this only for testing
 app.TryAddFirstUser();
 
 // Configure the HTTP request pipeline.
@@ -47,8 +50,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

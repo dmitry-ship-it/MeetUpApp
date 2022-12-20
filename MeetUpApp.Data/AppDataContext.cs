@@ -108,12 +108,13 @@ namespace MeetUpApp.Data
 
             // name column
             modelBuilder.Entity<User>()
-                .HasIndex(u => u.Name);
+                .HasIndex(u => u.Name)
+                .IsUnique();
 
             modelBuilder.Entity<User>()
                 .Property(u => u.Name)
-                .IsUnicode()
                 .HasMaxLength(20)
+                .IsUnicode()
                 .IsRequired();
 
             // passwordhash column
