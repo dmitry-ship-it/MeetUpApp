@@ -1,11 +1,14 @@
-using MeetUpApp.Api;
+using MeetUpApp.Api.CustomMiddlewares;
 using MeetUpApp.Data;
 using MeetUpApp.Data.DAL;
 using MeetUpApp.Data.Models;
 using MeetUpApp.Managers;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UsePreconfiguredSerilog();
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDataContext>(options =>
@@ -24,19 +27,19 @@ builder.Services.AddScoped<MeetupManager>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSessionForJwtBearer();
 builder.Services.AddAuthenticationForJwtBearer()
-    .AddPreconfiguredJwtBearer(
-        builder.Configuration.GetSection("AuthSettings"));
+    .AddPreconfiguredJwtBearer(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseCustomExceptionHandler();
+app.UseExceptionHandler();
+// app.UseCustomExceptionHandler();
 
 // remove if at least one user is already exists
 // !! use this only for testing 
-app.Services.TryAddFirstUser();
+app.TryAddFirstUser();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -44,6 +47,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

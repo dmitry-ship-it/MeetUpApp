@@ -10,14 +10,10 @@ namespace MeetUpApp.Api.Controllers
     public class UserController : Controller
     {
         private readonly UserManager manager;
-        private readonly ILogger<UserController> logger;
 
-        public UserController(
-            UserManager manager,
-            ILogger<UserController> logger)
+        public UserController(UserManager manager)
         {
             this.manager = manager;
-            this.logger = logger;
         }
 
         [HttpPost(nameof(Login))]
@@ -25,26 +21,14 @@ namespace MeetUpApp.Api.Controllers
             [FromBody] UserViewModel viewModel,
             CancellationToken cancellationToken)
         {
+            // TODO: Move to manager
             var user = await manager.GetAsync(
                 u => u.Name == viewModel.Username, cancellationToken);
 
-            //logger.LogInformation(
-            //    "Attempted to log in as '{Name}' but this user was not found.",
-            //    viewModel.Username);
-
             manager.CheckCredentials(user, viewModel.Password);
-            //logger.LogInformation(
-            //    "Attempted to log in as '{Name}' but password is invalid.",
-            //    viewModel.Username);
-
-            //return BadRequest("Username or password is invalid.");
 
             // give JWT token
             manager.CreateAuthenticationTicket(user, HttpContext.Session);
-
-            logger.LogInformation(
-                "User '{Name}' successfully logged in.",
-                    viewModel.Username);
 
             return Ok("You have successfully logged in.");
         }
@@ -64,16 +48,8 @@ namespace MeetUpApp.Api.Controllers
                 viewModel.Username,
                 viewModel.Password,
                 cancellationToken);
-            //logger.LogWarning(
-            //    "Can't create new user '{Name}' (DB error).",
-            //    viewModel.Username);
 
-            //return BadRequest("Can't create new user with this username.");
-
-            logger.LogInformation(
-                "User '{Name}' successfully created.",
-                    viewModel.Username);
-
+            // TODO: Move messgate to Constants
             return Ok("You have successfully registered.");
         }
 
@@ -81,12 +57,6 @@ namespace MeetUpApp.Api.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Logout()
         {
-            //if (HttpContext.User?.Identity is not null)
-            //{
-            //    logger.LogInformation("User '{Name}' logged out",
-            //        HttpContext.User!.Identity.Name);
-            //}
-
             HttpContext.Session.Clear();
             return Ok("Logged out.");
         }

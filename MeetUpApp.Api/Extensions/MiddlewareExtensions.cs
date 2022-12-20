@@ -7,15 +7,30 @@ using System.Text;
 using System.Data.Common;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
-using MeetUpApp.ViewModels;
+using Serilog;
 
-namespace MeetUpApp.Api
+namespace MeetUpApp.Api.CustomMiddlewares
 {
-    public static class ProgramExtensions
+    public static class MiddlewareExtensions
     {
-        public static IServiceProvider TryAddFirstUser(this IServiceProvider serviceProvider)
+        public static IHostBuilder UsePreconfiguredSerilog(this IHostBuilder builder)
         {
-            using var services = serviceProvider.CreateScope();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                //.MinimumLevel.Override("System", LogEventLevel.Warning)
+                //.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                //.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                //.WriteTo.Seq()
+                .CreateLogger();
+
+            return builder.UseSerilog(Log.Logger);
+        }
+
+        public static IApplicationBuilder TryAddFirstUser(this IApplicationBuilder builder)
+        {
+            using var services = builder.ApplicationServices.CreateScope();
             var db = services.ServiceProvider.GetRequiredService<AppDataContext>();
             if (!db.User.Any())
             {
@@ -23,7 +38,7 @@ namespace MeetUpApp.Api
                 userManager.AddUser("admin", "Qs3PGVAyyhUXtkRw").Wait();
             }
 
-            return serviceProvider;
+            return builder;
         }
 
         public static IServiceCollection AddSessionForJwtBearer(this IServiceCollection services)
@@ -48,9 +63,10 @@ namespace MeetUpApp.Api
 
         public static AuthenticationBuilder AddPreconfiguredJwtBearer(
             this AuthenticationBuilder builder,
-            IConfigurationSection jwtSection)
+            IConfiguration configuration)
         {
-            var key = Encoding.Default.GetBytes(jwtSection["Token"]!);
+            var key = Encoding.Default.GetBytes(configuration
+                .GetRequiredSection("AuthSettings")["Token"]!);
 
             return builder.AddJwtBearer(options =>
             {
@@ -98,51 +114,46 @@ namespace MeetUpApp.Api
             });
         }
 
-        public static IApplicationBuilder UseCustomExceptionHandler(this IApplicationBuilder app)
+        public static IApplicationBuilder AddPreconfiguredExceptionHandler(
+            this IApplicationBuilder builder)
         {
-            return app.Use(async (context, next) =>
+            return builder.Use(async (context, next) =>
             {
                 try
                 {
                     await next();
                 }
-                catch (ArgumentException ex)
+                catch (Exception ex)
                 {
-                    await context.WriteExceptionMessage(
-                        StatusCodes.Status400BadRequest,
-                        ex.Message);
-                }
-                catch (DbUpdateException ex)
-                {
-                    await context.WriteExceptionMessage(
-                        StatusCodes.Status500InternalServerError,
-                        ex.Message);
-                }
-                catch (DbException ex)
-                {
-                    await context.WriteExceptionMessage(
-                        StatusCodes.Status500InternalServerError,
-                        ex.Message);
-                }
-                catch (Exception)
-                {
-                    await context.WriteExceptionMessage(
-                        StatusCodes.Status500InternalServerError,
-                        "Internal server error");
+                    await WriteExceptionMessage(context.Response, ex);
+                    LogException(ex, Log.Logger);
                 }
             });
         }
 
         private static async Task WriteExceptionMessage(
-            this HttpContext httpContext,
-            int statusCode,
-            string message)
+            this HttpResponse respose,
+            Exception ex)
         {
-            httpContext.Response.StatusCode = statusCode;
-            await httpContext.Response.WriteAsJsonAsync(new MessageModel
+            respose.StatusCode =
+                ex is ArgumentException or DbException or DbUpdateException
+                    ? StatusCodes.Status400BadRequest
+                    : StatusCodes.Status500InternalServerError;
+
+            await respose.WriteAsJsonAsync(new
             {
-                Message = message
+                Message = GetErrorMessage(ex)
             });
+        }
+
+        private static void LogException(Exception ex, Serilog.ILogger logger)
+        {
+            logger.Warning(GetErrorMessage(ex));
+        }
+
+        private static string GetErrorMessage(Exception ex)
+        {
+            return $"Error: {ex.Message}";
         }
     }
 }

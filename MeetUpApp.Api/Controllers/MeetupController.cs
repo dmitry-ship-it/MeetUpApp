@@ -10,14 +10,10 @@ namespace MeetUpApp.Api.Controllers
     public class MeetupController : Controller
     {
         private readonly MeetupManager manager;
-        private readonly ILogger<MeetupController> logger;
 
-        public MeetupController(
-            MeetupManager manager,
-            ILogger<MeetupController> logger)
+        public MeetupController(MeetupManager manager)
         {
             this.manager = manager;
-            this.logger = logger;
         }
 
         [HttpGet(nameof(All))]
@@ -35,13 +31,6 @@ namespace MeetUpApp.Api.Controllers
             CancellationToken cancellationToken)
         {
             await manager.AddAsync(meetup, cancellationToken);
-            //logger.LogInformation(
-            //    "User '{Name}' tried to create the meetup but failed.",
-            //    HttpContext.User.Identity!.Name);
-
-            logger.LogInformation("User '{Name}' created a new meetup.",
-                HttpContext.User.Identity!.Name);
-
             return Accepted();
         }
 
@@ -51,9 +40,6 @@ namespace MeetUpApp.Api.Controllers
             CancellationToken cancellationToken)
         {
             var meetup = await manager.GetAsync(id, cancellationToken);
-
-            // return BadRequest($"Meetup with id={id} was not found");
-
             return Ok(meetup);
         }
 
@@ -65,15 +51,6 @@ namespace MeetUpApp.Api.Controllers
             CancellationToken cancellationToken)
         {
             await manager.UpdateAsync(id, meetup, cancellationToken);
-
-            //logger.LogInformation(
-            //    "User '{Name}' tried to update meetup but this meetup was not found.",
-            //    HttpContext.User.Identity!.Name);
-            //return BadRequest("This meetup was not found.");
-
-            logger.LogInformation("User '{Name}' updated meetup with id={Id}.",
-                HttpContext.User.Identity!.Name, id);
-
             return Accepted();
         }
 
@@ -84,10 +61,6 @@ namespace MeetUpApp.Api.Controllers
             CancellationToken cancellationToken)
         {
             await manager.RemoveAsync(id, cancellationToken);
-
-            logger.LogInformation("User '{Name}' has deleted meetup with id={Id}.",
-                HttpContext.User.Identity!.Name, id);
-
             return Accepted();
         }
     }

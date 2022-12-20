@@ -58,6 +58,7 @@ namespace MeetUpApp.Managers
             // check if meetup with this id exists
             // without this check EF throws DbUpdateConcurrencyException
             // which can't be caught
+            // throws ArgumentException
             await GetAsync(id, cancellationToken);
 
             await repository.UpdateAsync(dbModel, cancellationToken);
