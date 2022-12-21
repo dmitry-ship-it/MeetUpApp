@@ -9,7 +9,9 @@ namespace MeetUpApp.ViewModels.Mapping
         {
             CreateMap<MeetupViewModel, Meetup>();
             CreateMap<AddressViewModel, Meetup>();
-            CreateMap<int, Meetup>();
+            CreateMap<int, Meetup>()
+                .ForMember(m => m.Id,
+                    opt => opt.MapFrom(src => src));
         }
     }
 }

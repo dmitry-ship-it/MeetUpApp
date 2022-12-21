@@ -1,11 +1,11 @@
-using MeetUpApp.Api.CustomMiddlewares;
+using MeetUpApp.Api.Middleware;
+using MeetUpApp.Api.Middleware.Extensions;
 using MeetUpApp.Data;
 using MeetUpApp.Data.DAL;
 using MeetUpApp.Data.Models;
 using MeetUpApp.Managers;
 using MeetUpApp.ViewModels.Mapping;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +38,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UsePreconfiguredExceptionHandler();
+app.UseMiddleware<ExceptionLoggerMiddleware>();
 
 // remove if at least one user is already exists
 // !! use this only for testing
