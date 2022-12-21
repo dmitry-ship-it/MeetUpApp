@@ -47,8 +47,7 @@ namespace MeetUpApp.Managers
             return meetup;
         }
 
-        public async Task UpdateAsync(
-            int id,
+        public async Task UpdateAsync(int id,
             MeetupViewModel viewModel,
             CancellationToken cancellationToken = default)
         {
@@ -56,17 +55,16 @@ namespace MeetUpApp.Managers
             mapper.Map(viewModel.Address, dbModel);
             mapper.Map(id, dbModel);
 
-            // check if meetup with this id exists
+            // Check if meetup with this id exists
             // without this check EF throws DbUpdateConcurrencyException
-            // which can't be caught
-            // throws ArgumentException
+            // which can't be caught.
+            // This call can throw ArgumentException
             await GetAsync(id, cancellationToken);
 
             await repository.UpdateAsync(dbModel, cancellationToken);
         }
 
-        public async Task RemoveAsync(
-            int id,
+        public async Task RemoveAsync(int id,
             CancellationToken cancellationToken = default)
         {
             var meetup = await GetAsync(id, cancellationToken);

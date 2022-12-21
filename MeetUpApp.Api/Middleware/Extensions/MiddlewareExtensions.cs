@@ -1,28 +1,25 @@
 ﻿using MeetUpApp.Data;
 using MeetUpApp.Managers;
-using MeetUpApp.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Data;
-using System.Data.Common;
 using System.Text;
 
-namespace MeetUpApp.Api.CustomMiddlewares
+namespace MeetUpApp.Api.Middleware.Extensions
 {
     public static class MiddlewareExtensions
     {
         public static IHostBuilder UsePreconfiguredSerilog(this IHostBuilder builder)
         {
-            Log.Logger = new LoggerConfiguration()
+            Serilog.ILogger logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .CreateLogger();
 
-            return builder.UseSerilog(Log.Logger);
+            return builder.UseSerilog(logger);
         }
 
         public static IApplicationBuilder TryAddFirstUser(this IApplicationBuilder builder)
@@ -74,9 +71,9 @@ namespace MeetUpApp.Api.CustomMiddlewares
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    //ValidIssuer = jwtConfigs["WebSiteDomain"]!,
+                    //ValidIssuer = jwtConfigs["ApiDomain"]!,
                     ValidateAudience = false,
-                    //ValidAudience = jwtConfigs["WebSiteDomain"]!,
+                    //ValidAudience = jwtConfigs["ApiDomain"]!,
                     RequireExpirationTime = true,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
@@ -109,48 +106,6 @@ namespace MeetUpApp.Api.CustomMiddlewares
 
                 await next();
             });
-        }
-
-        public static IApplicationBuilder UsePreconfiguredExceptionHandler(
-            this IApplicationBuilder builder)
-        {
-            return builder.Use(async (context, next) =>
-            {
-                try
-                {
-                    await next();
-                }
-                catch (Exception ex)
-                {
-                    await WriteExceptionMessage(context.Response, ex);
-                    LogException(ex, Log.Logger);
-                }
-            });
-        }
-
-        private static async Task WriteExceptionMessage(
-            this HttpResponse respose,
-            Exception ex)
-        {
-            respose.StatusCode =
-                ex is ArgumentException or DbException or DbUpdateException
-                    ? StatusCodes.Status400BadRequest
-                    : StatusCodes.Status500InternalServerError;
-
-            await respose.WriteAsJsonAsync(new MessageModel
-            {
-                Message = GetErrorMessage(ex)
-            });
-        }
-
-        private static void LogException(Exception ex, Serilog.ILogger logger)
-        {
-            logger.Warning(GetErrorMessage(ex));
-        }
-
-        private static string GetErrorMessage(Exception ex)
-        {
-            return $"Error: {ex.Message}";
         }
     }
 }
