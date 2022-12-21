@@ -1,5 +1,4 @@
 ﻿using MeetUpApp.Managers;
-using MeetUpApp.Resources;
 using MeetUpApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,14 +27,11 @@ namespace MeetUpApp.Api.Controllers
             // give JWT token
             manager.CreateAuthenticationTicket(user, HttpContext.Session);
 
-            return Ok(new MessageModel
-            {
-                Message = ResponseMessages.LoggedIn
-            });
+            return Ok();
         }
 
         /// <summary>
-        /// Only authorized use can create other user.
+        /// Only authorized user can create other user.
         /// </summary>
         /// <param name="viewModel">View model with username and password</param>
         /// <param name="cancellationToken"></param>
@@ -50,10 +46,7 @@ namespace MeetUpApp.Api.Controllers
                 viewModel.Password,
                 cancellationToken);
 
-            return Ok(new MessageModel
-            {
-                Message = ResponseMessages.Registered
-            });
+            return Ok();
         }
 
         [HttpGet(nameof(Logout))]
@@ -61,10 +54,7 @@ namespace MeetUpApp.Api.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-            return Ok(new MessageModel
-            {
-                Message = ResponseMessages.LoggedOut
-            });
+            return Ok();
         }
     }
 }
