@@ -1,5 +1,4 @@
-﻿using MeetUpApp.Data.EntityConfiguration;
-using MeetUpApp.Data.Models;
+﻿using MeetUpApp.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeetUpApp.Data
@@ -15,13 +14,9 @@ namespace MeetUpApp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // meetup
-            new MeetupEntityTypeConfiguration()
-                .Configure(modelBuilder.Entity<Meetup>());
-
-            // user
-            new UserEntityTypeConfiguration()
-                .Configure(modelBuilder.Entity<User>());
+            modelBuilder.ApplyConfigurationsFromAssembly(
+                // current assembly
+                typeof(AppDataContext).Assembly);
         }
     }
 }

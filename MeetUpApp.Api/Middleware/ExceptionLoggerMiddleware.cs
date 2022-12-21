@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Data.Common;
-
-namespace MeetUpApp.Api.Middleware
+﻿namespace MeetUpApp.Api.Middleware
 {
     public class ExceptionLoggerMiddleware
     {
@@ -24,25 +21,9 @@ namespace MeetUpApp.Api.Middleware
             }
             catch (Exception ex)
             {
-                await WriteExceptionMessage(context.Response, ex);
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 LogException(ex);
             }
-        }
-
-        private static async Task WriteExceptionMessage(
-            HttpResponse respose,
-            Exception ex)
-        {
-            respose.StatusCode =
-                ex is ArgumentException or DbException or DbUpdateException
-                    ? StatusCodes.Status400BadRequest
-                    : StatusCodes.Status500InternalServerError;
-
-            //await respose.WriteAsJsonAsync(new MessageModel
-            //{
-            //    Message = $"Error: {ex.Message}"
-            //});
-            await Task.CompletedTask;
         }
 
         private void LogException(Exception ex)
