@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include=".Migrations\20221219180426_InitialCreate.cs" />
+    <Compile Include=".Migrations\20221219180426_InitialCreate.Designer.cs" />
+    <Compile Include=".Migrations\20221220031103_UsernameUniqueIndex.cs" />
+    <Compile Include=".Migrations\20221220031103_UsernameUniqueIndex.Designer.cs" />
+    <Compile Include=".Migrations\AppDataContextModelSnapshot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
