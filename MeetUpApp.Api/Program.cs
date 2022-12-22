@@ -20,6 +20,7 @@ builder.Services.AddAutoMapper(
     typeof(Program), typeof(MeetupProfile));
 
 builder.Services.AddControllers();
+builder.Services.AddPreconfiguredFluentValidation();
 
 // DI
 builder.Services.AddScoped<IRepository<Meetup>, MeetupRepository>();

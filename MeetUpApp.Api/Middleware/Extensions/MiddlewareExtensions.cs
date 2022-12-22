@@ -1,5 +1,9 @@
-﻿using MeetUpApp.Data;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using MeetUpApp.Data;
 using MeetUpApp.Managers;
+using MeetUpApp.ViewModels.Validation;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -92,6 +96,16 @@ namespace MeetUpApp.Api.Middleware.Extensions
                     }
                 };
             });
+        }
+
+        public static IServiceCollection AddPreconfiguredFluentValidation(
+            this IServiceCollection services)
+        {
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining<UserModelValidator>();
+            services.AddFluentValidationRulesToSwagger();
+
+            return services;
         }
 
         public static IApplicationBuilder UseJwtBearer(this IApplicationBuilder app)
