@@ -31,6 +31,7 @@ namespace MeetUpApp.Api.Controllers
             CancellationToken cancellationToken)
         {
             await manager.AddAsync(meetup, cancellationToken);
+
             return Accepted();
         }
 
@@ -40,6 +41,7 @@ namespace MeetUpApp.Api.Controllers
             CancellationToken cancellationToken)
         {
             var meetup = await manager.GetAsync(id, cancellationToken);
+
             return Ok(meetup);
         }
 
@@ -51,6 +53,7 @@ namespace MeetUpApp.Api.Controllers
             CancellationToken cancellationToken)
         {
             await manager.UpdateAsync(id, meetup, cancellationToken);
+
             return Accepted();
         }
 
@@ -61,6 +64,7 @@ namespace MeetUpApp.Api.Controllers
             CancellationToken cancellationToken)
         {
             await manager.RemoveAsync(id, cancellationToken);
+
             return Accepted();
         }
     }

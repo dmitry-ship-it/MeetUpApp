@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeetUpApp.Managers", "MeetU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeetUpApp.ViewModels", "MeetUpApp.ViewModels\MeetUpApp.ViewModels.csproj", "{9C63D66C-47C3-4924-A7F0-F7410BFADB9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetUpApp.Resources", "MeetUpApp.Resources\MeetUpApp.Resources.csproj", "{6AD1BC4A-51BD-4981-BDF2-A867276792E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeetUpApp.Resources", "MeetUpApp.Resources\MeetUpApp.Resources.csproj", "{6AD1BC4A-51BD-4981-BDF2-A867276792E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
