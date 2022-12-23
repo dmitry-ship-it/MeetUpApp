@@ -34,10 +34,8 @@ namespace MeetUpApp.Managers
             string password,
             CancellationToken cancellationToken = default)
         {
-            // generate random salt (256 bit)
             var salt = RandomNumberGenerator.GetBytes(32);
 
-            // generate the salted and hashed password
             var saltedAndHashedPassword = SaltAndHashPassword(
                 password, Convert.ToBase64String(salt));
 
@@ -112,7 +110,7 @@ namespace MeetUpApp.Managers
         {
             var bytes = Encoding.Default.GetBytes(password + salt);
 
-            return Convert.ToBase64String(SHA512.HashData(bytes)); // 512 bit
+            return Convert.ToBase64String(SHA512.HashData(bytes));
         }
     }
 }

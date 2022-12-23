@@ -1,6 +1,5 @@
 ﻿using MeetUpApp.Data;
 using MeetUpApp.Managers;
-using Microsoft.AspNetCore.Hosting;
 
 namespace MeetUpApp.Api.Middleware.Extensions
 {
