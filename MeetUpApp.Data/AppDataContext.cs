@@ -15,7 +15,6 @@ namespace MeetUpApp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(
-                // current assembly
                 typeof(AppDataContext).Assembly);
         }
     }

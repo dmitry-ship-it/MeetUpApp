@@ -26,20 +26,16 @@ namespace MeetUpApp.Managers
 
         /// <summary>
         /// Creates User object for database.
-        /// This algorithm uses PBKDF2 with HMAC-SHA-256 and random 32-byte 'salt' to protect user password.
+        /// This algorithm uses SHA512 
+        /// and random 32-byte 'salt' to protect user password.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="password"></param>
-        /// <returns>User instance with filled Username, PasswordHash and Salt (in base64 form).</returns>
-        public async Task AddUser(
+        public async Task AddUserAsync(
             string name,
             string password,
             CancellationToken cancellationToken = default)
         {
-            // generate random salt (256 bit)
             var salt = RandomNumberGenerator.GetBytes(32);
 
-            // generate the salted and hashed password
             var saltedAndHashedPassword = SaltAndHashPassword(
                 password, Convert.ToBase64String(salt));
 
@@ -51,7 +47,7 @@ namespace MeetUpApp.Managers
             }, cancellationToken);
         }
 
-        public async Task<User> CheckCredentials(
+        public async Task<User> CheckCredentialsAsync(
             UserViewModel viewModel,
             string password,
             CancellationToken cancellationToken = default)
@@ -113,7 +109,8 @@ namespace MeetUpApp.Managers
         private static string SaltAndHashPassword(string password, string salt)
         {
             var bytes = Encoding.Default.GetBytes(password + salt);
-            return Convert.ToBase64String(SHA512.HashData(bytes)); // 512 bit
+
+            return Convert.ToBase64String(SHA512.HashData(bytes));
         }
     }
 }

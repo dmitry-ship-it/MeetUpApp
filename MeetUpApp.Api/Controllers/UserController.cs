@@ -16,15 +16,14 @@ namespace MeetUpApp.Api.Controllers
             this.manager = manager;
         }
 
-        [HttpPost(nameof(Login))]
-        public async Task<IActionResult> Login(
+        [HttpPost("Login")]
+        public async Task<IActionResult> LoginAsync(
             [FromBody] UserViewModel viewModel,
             CancellationToken cancellationToken)
         {
-            var user = await manager.CheckCredentials(viewModel,
+            var user = await manager.CheckCredentialsAsync(viewModel,
                 viewModel.Password, cancellationToken);
 
-            // give JWT token
             manager.CreateAuthenticationTicket(user, HttpContext.Session);
 
             return Ok();
@@ -33,15 +32,13 @@ namespace MeetUpApp.Api.Controllers
         /// <summary>
         /// Only authorized user can create other user.
         /// </summary>
-        /// <param name="viewModel">View model with username and password</param>
-        /// <param name="cancellationToken"></param>
         [Authorize]
-        [HttpPost(nameof(Register))]
-        public async Task<IActionResult> Register(
+        [HttpPost("Register")]
+        public async Task<IActionResult> RegisterAsync(
             [FromBody] UserViewModel viewModel,
             CancellationToken cancellationToken)
         {
-            await manager.AddUser(
+            await manager.AddUserAsync(
                 viewModel.Username,
                 viewModel.Password,
                 cancellationToken);
@@ -54,6 +51,7 @@ namespace MeetUpApp.Api.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
+
             return Ok();
         }
     }

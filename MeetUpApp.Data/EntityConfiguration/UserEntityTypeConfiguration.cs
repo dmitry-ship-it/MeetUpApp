@@ -8,7 +8,6 @@ namespace MeetUpApp.Data.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            // id column
             builder.HasKey(u => u.Id)
                 .IsClustered();
 
@@ -16,7 +15,6 @@ namespace MeetUpApp.Data.EntityConfiguration
                 .UseIdentityColumn()
                 .IsRequired();
 
-            // name column
             builder.HasIndex(u => u.Name)
                 .IsUnique();
 
@@ -25,13 +23,11 @@ namespace MeetUpApp.Data.EntityConfiguration
                 .IsUnicode()
                 .IsRequired();
 
-            // passwordhash column
             builder.Property(u => u.PasswordHash)
                 .HasMaxLength(88)
                 .IsFixedLength()
                 .IsRequired();
 
-            // salt column
             builder.Property(u => u.Salt)
                 .HasMaxLength(44)
                 .IsFixedLength()

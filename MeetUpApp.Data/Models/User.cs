@@ -12,7 +12,5 @@
         public string PasswordHash { get; set; }
 
         public string Salt { get; set; }
-
-        // good place for role prop
     }
 }

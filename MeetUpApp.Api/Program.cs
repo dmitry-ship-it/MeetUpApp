@@ -1,65 +1,31 @@
 using MeetUpApp.Api.Middleware;
 using MeetUpApp.Api.Middleware.Extensions;
-using MeetUpApp.Data;
-using MeetUpApp.Data.DAL;
-using MeetUpApp.Data.Models;
-using MeetUpApp.Managers;
+using MeetUpApp.Data.Extensions;
+using MeetUpApp.Managers.Extensions;
 using MeetUpApp.ViewModels.Mapping;
-using Microsoft.EntityFrameworkCore;
+using MeetUpApp.ViewModels.Validation.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UsePreconfiguredSerilog();
+builder.Host.UsePreconfiguredSerilog(builder.Configuration);
 
-// Add services to the container.
-builder.Services.AddDbContext<AppDataContext>(options =>
-    options.UseSqlServer(builder.Configuration
-        .GetConnectionString("DefaultDb")));
-
-builder.Services.AddAutoMapper(
-    typeof(Program), typeof(MeetupProfile));
-
+builder.Services.AddDbContextWithRepositories(builder.Configuration);
+builder.Services.AddAutoMapper(typeof(MeetupProfile));
 builder.Services.AddControllers();
 builder.Services.AddPreconfiguredFluentValidation();
-
-// DI
-builder.Services.AddScoped<IRepository<Meetup>, MeetupRepository>();
-builder.Services.AddScoped<IRepository<User>, UserRepository>();
-builder.Services.AddScoped<UserManager>();
-builder.Services.AddScoped<MeetupManager>();
-
-// authentication
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSessionForJwtBearer();
-builder.Services.AddAuthenticationForJwtBearer()
-    .AddPreconfiguredJwtBearer(builder.Configuration);
-
+builder.Services.AddManagers();
+builder.Services.AddJwtBearerAuthentication(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionLoggerMiddleware>();
-
-// remove if at least one user is already exists
-// !! use this only for testing
 app.TryAddFirstUser();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+app.UseSwaggerWithUI(app.Environment);
 app.UseHttpsRedirection();
-
 app.UseCookiePolicy();
-app.UseSession();
-app.UseJwtBearer();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
+app.UseSessionWithJwtBearer();
+app.UseAuthenticationAndAuthorization();
 app.MapControllers();
 app.Run();
