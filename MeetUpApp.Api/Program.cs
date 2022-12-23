@@ -7,7 +7,7 @@ using MeetUpApp.ViewModels.Validation.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UsePreconfiguredSerilog();
+builder.Host.UsePreconfiguredSerilog(builder.Configuration);
 
 builder.Services.AddDbContextWithRepositories(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MeetupProfile));
