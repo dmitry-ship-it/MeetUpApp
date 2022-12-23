@@ -22,10 +22,10 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionLoggerMiddleware>();
 app.TryAddFirstUser();
-app.AddSwaggerWithUI(app.Environment);
+app.UseSwaggerWithUI(app.Environment);
 app.UseHttpsRedirection();
 app.UseCookiePolicy();
 app.UseSessionWithJwtBearer();
-app.AddAuthenticationAndAuthorization();
+app.UseAuthenticationAndAuthorization();
 app.MapControllers();
 app.Run();

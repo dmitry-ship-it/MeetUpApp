@@ -24,7 +24,7 @@ namespace MeetUpApp.Api.Middleware.Extensions
             return builder;
         }
 
-        public static IApplicationBuilder AddSwaggerWithUI(
+        public static IApplicationBuilder UseSwaggerWithUI(
             this IApplicationBuilder builder,
             IWebHostEnvironment environment)
         {
@@ -37,7 +37,7 @@ namespace MeetUpApp.Api.Middleware.Extensions
             return builder;
         }
 
-        public static IApplicationBuilder AddAuthenticationAndAuthorization(
+        public static IApplicationBuilder UseAuthenticationAndAuthorization(
             this IApplicationBuilder builder)
         {
             builder.UseAuthentication();
