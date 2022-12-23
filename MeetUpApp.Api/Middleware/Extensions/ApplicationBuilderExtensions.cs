@@ -18,7 +18,7 @@ namespace MeetUpApp.Api.Middleware.Extensions
                 var userManager = services
                     .ServiceProvider.GetRequiredService<UserManager>();
 
-                userManager.AddUser("admin", "Qs3PGVAyyhUXtkRw").Wait();
+                userManager.AddUserAsync("admin", "Qs3PGVAyyhUXtkRw").Wait();
             }
 
             return builder;

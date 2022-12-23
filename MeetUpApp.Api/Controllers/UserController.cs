@@ -16,12 +16,12 @@ namespace MeetUpApp.Api.Controllers
             this.manager = manager;
         }
 
-        [HttpPost(nameof(Login))]
-        public async Task<IActionResult> Login(
+        [HttpPost("Login")]
+        public async Task<IActionResult> LoginAsync(
             [FromBody] UserViewModel viewModel,
             CancellationToken cancellationToken)
         {
-            var user = await manager.CheckCredentials(viewModel,
+            var user = await manager.CheckCredentialsAsync(viewModel,
                 viewModel.Password, cancellationToken);
 
             manager.CreateAuthenticationTicket(user, HttpContext.Session);
@@ -33,12 +33,12 @@ namespace MeetUpApp.Api.Controllers
         /// Only authorized user can create other user.
         /// </summary>
         [Authorize]
-        [HttpPost(nameof(Register))]
-        public async Task<IActionResult> Register(
+        [HttpPost("Register")]
+        public async Task<IActionResult> RegisterAsync(
             [FromBody] UserViewModel viewModel,
             CancellationToken cancellationToken)
         {
-            await manager.AddUser(
+            await manager.AddUserAsync(
                 viewModel.Username,
                 viewModel.Password,
                 cancellationToken);

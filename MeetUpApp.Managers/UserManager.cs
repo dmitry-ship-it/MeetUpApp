@@ -29,7 +29,7 @@ namespace MeetUpApp.Managers
         /// This algorithm uses SHA512 
         /// and random 32-byte 'salt' to protect user password.
         /// </summary>
-        public async Task AddUser(
+        public async Task AddUserAsync(
             string name,
             string password,
             CancellationToken cancellationToken = default)
@@ -47,7 +47,7 @@ namespace MeetUpApp.Managers
             }, cancellationToken);
         }
 
-        public async Task<User> CheckCredentials(
+        public async Task<User> CheckCredentialsAsync(
             UserViewModel viewModel,
             string password,
             CancellationToken cancellationToken = default)

@@ -16,17 +16,17 @@ namespace MeetUpApp.Api.Controllers
             this.manager = manager;
         }
 
-        [HttpGet(nameof(All))]
-        public async Task<IActionResult> All(
+        [HttpGet("All")]
+        public async Task<IActionResult> AllAsync(
             CancellationToken cancellationToken)
         {
             return Ok(await manager.GetAllAsync(cancellationToken));
         }
 
         [Authorize]
-        [HttpPost(nameof(Create))]
+        [HttpPost("Create")]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> Create(
+        public async Task<IActionResult> CreateAsync(
             [FromBody] MeetupViewModel meetup,
             CancellationToken cancellationToken)
         {
@@ -36,7 +36,7 @@ namespace MeetUpApp.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Select(
+        public async Task<IActionResult> SelectAsync(
             [FromQuery] int id,
             CancellationToken cancellationToken)
         {
@@ -46,8 +46,8 @@ namespace MeetUpApp.Api.Controllers
         }
 
         [Authorize]
-        [HttpPatch(nameof(Update))]
-        public async Task<IActionResult> Update(
+        [HttpPatch("Update")]
+        public async Task<IActionResult> UpdateAsync(
             [FromQuery] int id,
             [FromBody] MeetupViewModel meetup,
             CancellationToken cancellationToken)
@@ -58,8 +58,8 @@ namespace MeetUpApp.Api.Controllers
         }
 
         [Authorize]
-        [HttpDelete(nameof(Delete))]
-        public async Task<IActionResult> Delete(
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeleteAsync(
             [FromQuery] int id,
             CancellationToken cancellationToken)
         {
