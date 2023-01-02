@@ -17,7 +17,7 @@ namespace MeetUpApp.Managers
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<Meetup>> GetAllAsync(
+        public virtual async Task<IEnumerable<Meetup>> GetAllAsync(
             CancellationToken cancellationToken = default)
         {
             return await repository.GetAllAsync(cancellationToken);
@@ -33,7 +33,7 @@ namespace MeetUpApp.Managers
             await repository.InsertAsync(dbModel, cancellationToken);
         }
 
-        public async Task<Meetup> GetAsync(int id,
+        public virtual async Task<Meetup> GetAsync(int id,
             CancellationToken cancellationToken = default)
         {
             var meetup = await repository.GetByExpressionAsync(
