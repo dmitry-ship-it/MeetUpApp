@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeetUpApp.ViewModels", "Mee
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeetUpApp.Resources", "MeetUpApp.Resources\MeetUpApp.Resources.csproj", "{6AD1BC4A-51BD-4981-BDF2-A867276792E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetUpApp.Managers.Tests", "MeetUpApp.Managers.Tests\MeetUpApp.Managers.Tests.csproj", "{91D75836-5CD6-4CEC-8FDD-E4D7CB8F4E60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetUpApp.Api.Tests", "MeetUpApp.Api.Tests\MeetUpApp.Api.Tests.csproj", "{8F0DD915-C830-48F5-A21C-AEC642EE1C6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{6AD1BC4A-51BD-4981-BDF2-A867276792E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AD1BC4A-51BD-4981-BDF2-A867276792E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AD1BC4A-51BD-4981-BDF2-A867276792E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91D75836-5CD6-4CEC-8FDD-E4D7CB8F4E60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91D75836-5CD6-4CEC-8FDD-E4D7CB8F4E60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91D75836-5CD6-4CEC-8FDD-E4D7CB8F4E60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91D75836-5CD6-4CEC-8FDD-E4D7CB8F4E60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F0DD915-C830-48F5-A21C-AEC642EE1C6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F0DD915-C830-48F5-A21C-AEC642EE1C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F0DD915-C830-48F5-A21C-AEC642EE1C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F0DD915-C830-48F5-A21C-AEC642EE1C6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

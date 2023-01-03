@@ -17,13 +17,13 @@ namespace MeetUpApp.Managers
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<Meetup>> GetAllAsync(
+        public virtual async Task<IEnumerable<Meetup>> GetAllAsync(
             CancellationToken cancellationToken = default)
         {
             return await repository.GetAllAsync(cancellationToken);
         }
 
-        public async Task AddAsync(
+        public virtual async Task AddAsync(
             MeetupViewModel viewModel,
             CancellationToken cancellationToken = default)
         {
@@ -33,7 +33,7 @@ namespace MeetUpApp.Managers
             await repository.InsertAsync(dbModel, cancellationToken);
         }
 
-        public async Task<Meetup> GetAsync(int id,
+        public virtual async Task<Meetup> GetAsync(int id,
             CancellationToken cancellationToken = default)
         {
             var meetup = await repository.GetByExpressionAsync(
@@ -52,7 +52,7 @@ namespace MeetUpApp.Managers
         /// Without this check EF throws <c>DbUpdateConcurrencyException</c>
         /// which can't be caught.
         /// </summary>
-        public async Task UpdateAsync(int id,
+        public virtual async Task UpdateAsync(int id,
             MeetupViewModel viewModel,
             CancellationToken cancellationToken = default)
         {
@@ -64,7 +64,7 @@ namespace MeetUpApp.Managers
             await repository.UpdateAsync(dbModel, cancellationToken);
         }
 
-        public async Task RemoveAsync(int id,
+        public virtual async Task RemoveAsync(int id,
             CancellationToken cancellationToken = default)
         {
             var meetup = await GetAsync(id, cancellationToken);
