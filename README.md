@@ -75,16 +75,27 @@ cd MeetUpApp.Data
 dotnet ef --startup-project ../MeetUpApp.Api/MeetUpApp.Api.csproj database update
 ```
 
-7. Move to api folder
+7. Move to IdentityServer4 folder
+```sh
+cd ../MeetUpApp.Identity
+```
+
+8. Update database for IdentityServer4
+```sh
+dotnet ef database update
+```
+
+9. Move to api folder
 
 ```sh
 cd ../MeetUpApp.Api
 ```
 
-8. Start the application
+10. Start the application
 
 ```sh
 dotnet run -c Release
 ```
 
 Now you can navigate to https://localhost:7196/swagger and test it.
+Identity server is available on https://localhost:7216
