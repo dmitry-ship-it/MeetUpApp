@@ -76,22 +76,36 @@ dotnet ef --startup-project ../MeetUpApp.Api/MeetUpApp.Api.csproj database updat
 ```
 
 7. Move to IdentityServer4 folder
+
 ```sh
 cd ../MeetUpApp.Identity
 ```
 
-8. Update database for IdentityServer4
+8. Update database for PersistedGrantDbContext of IdentityServer4
+
 ```sh
-dotnet ef database update
+dotnet ef database update --context PersistedGrantDbContext
 ```
 
-9. Move to api folder
+9. Update database for ConfigurationDbContext of IdentityServer4
+
+```sh
+dotnet ef database update --context ConfigurationDbContext
+```
+
+10. Start IdentityServer4
+
+```sh
+dotnet run -c Release
+```
+
+11. Move to API folder
 
 ```sh
 cd ../MeetUpApp.Api
 ```
 
-10. Start the application
+12. Start API
 
 ```sh
 dotnet run -c Release

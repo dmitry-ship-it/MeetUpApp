@@ -47,8 +47,7 @@ namespace MeetUpApp.Identity
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                     }.Concat(ApiScopesNames).ToArray(),
-                    AllowAccessTokensViaBrowser = true,
-                    AccessTokenLifetime = TimeSpan.FromHours(2).Seconds
+                    AllowAccessTokensViaBrowser = true
                 }
             };
 
