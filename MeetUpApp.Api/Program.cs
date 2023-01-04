@@ -24,7 +24,7 @@ app.UseMiddleware<ExceptionLoggerMiddleware>();
 app.UseSwaggerWithUI(app.Environment);
 app.UseHttpsRedirection();
 app.UseCookiePolicy();
-app.UseSessionWithJwtBearer();
+app.UseSession();
 app.UseAuthenticationAndAuthorization();
 app.MapControllers();
 app.Run();

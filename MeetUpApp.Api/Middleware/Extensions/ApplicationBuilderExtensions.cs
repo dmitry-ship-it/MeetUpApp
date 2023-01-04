@@ -23,28 +23,5 @@
 
             return builder;
         }
-
-        public static IApplicationBuilder UseSessionWithJwtBearer(
-            this IApplicationBuilder builder)
-        {
-            builder.UseSession();
-            builder.UseJwtBearer();
-
-            return builder;
-        }
-
-        private static IApplicationBuilder UseJwtBearer(this IApplicationBuilder app)
-        {
-            return app.Use(async (context, next) =>
-            {
-                var token = context.Session.GetString("JWToken");
-                if (!string.IsNullOrEmpty(token))
-                {
-                    context.Request.Headers.Add("Authorization", $"Bearer {token}");
-                }
-
-                await next();
-            });
-        }
     }
 }
