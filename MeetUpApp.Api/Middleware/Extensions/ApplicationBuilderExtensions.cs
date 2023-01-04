@@ -1,29 +1,7 @@
-﻿using MeetUpApp.Data;
-using MeetUpApp.Managers;
-
-namespace MeetUpApp.Api.Middleware.Extensions
+﻿namespace MeetUpApp.Api.Middleware.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder TryAddFirstUser(this IApplicationBuilder builder)
-        {
-            using var services = builder
-                .ApplicationServices.CreateScope();
-
-            var db = services.ServiceProvider
-                .GetRequiredService<AppDataContext>();
-
-            if (!db.User.Any())
-            {
-                var userManager = services
-                    .ServiceProvider.GetRequiredService<UserManager>();
-
-                userManager.AddUserAsync("admin", "Qs3PGVAyyhUXtkRw").Wait();
-            }
-
-            return builder;
-        }
-
         public static IApplicationBuilder UseSwaggerWithUI(
             this IApplicationBuilder builder,
             IWebHostEnvironment environment)

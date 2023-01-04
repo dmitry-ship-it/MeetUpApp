@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace MeetUpApp.Identity.Extensions
 {
@@ -8,11 +7,9 @@ namespace MeetUpApp.Identity.Extensions
         public static IServiceCollection AddPreconfiguredIdentityServer(
             this IServiceCollection services, IConfiguration configuration)
         {
-            var assemblyName = typeof(Program).Assembly.GetName().Name;
-
             void ConfigureDbContext(DbContextOptionsBuilder x) =>
                 x.UseSqlServer(configuration.GetConnectionString("DefaultDb"),
-                o => o.MigrationsAssembly(assemblyName));
+                o => o.MigrationsAssembly(typeof(Program).Assembly.FullName));
 
             services.AddIdentityServer()
                 .AddConfigurationStore(options => options.ConfigureDbContext = ConfigureDbContext)

@@ -21,7 +21,6 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionLoggerMiddleware>();
-app.TryAddFirstUser();
 app.UseSwaggerWithUI(app.Environment);
 app.UseHttpsRedirection();
 app.UseCookiePolicy();
