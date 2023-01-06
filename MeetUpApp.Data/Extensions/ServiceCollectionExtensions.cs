@@ -16,7 +16,6 @@ namespace MeetUpApp.Data.Extensions
                     .GetConnectionString("DefaultDb")));
 
             services.AddScoped<IRepository<Meetup>, MeetupRepository>();
-            services.AddScoped<IRepository<User>, UserRepository>();
 
             return services;
         }

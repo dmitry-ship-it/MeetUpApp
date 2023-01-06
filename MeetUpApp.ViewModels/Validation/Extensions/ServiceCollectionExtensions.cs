@@ -11,7 +11,7 @@ namespace MeetUpApp.ViewModels.Validation.Extensions
             this IServiceCollection services)
         {
             services.AddFluentValidationAutoValidation();
-            services.AddValidatorsFromAssemblyContaining<UserModelValidator>();
+            services.AddValidatorsFromAssemblyContaining<MeetupModelValidator>();
             services.AddFluentValidationRulesToSwagger();
 
             return services;

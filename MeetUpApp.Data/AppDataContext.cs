@@ -6,9 +6,9 @@ namespace MeetUpApp.Data
     public class AppDataContext : DbContext
     {
         public DbSet<Meetup> Meetup { get; set; }
-        public DbSet<User> User { get; set; }
 
-        public AppDataContext(DbContextOptions<AppDataContext> options) : base(options)
+        public AppDataContext(DbContextOptions<AppDataContext> options)
+            : base(options)
         {
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.OpenApi.Models;
 
 namespace MeetUpApp.Api.Middleware.Extensions
 {
@@ -8,22 +9,56 @@ namespace MeetUpApp.Api.Middleware.Extensions
         public static IServiceCollection AddJwtBearerAuthentication(
             this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDistributedMemoryCache();
-            services.AddSessionForJwtBearer();
-            services.AddAuthenticationForJwtBearer()
+            services.AddDistributedMemoryCache()
+                .AddSession()
+                .AddAuthenticationForJwtBearer()
                 .AddPreconfiguredJwtBearer(configuration);
 
             return services;
         }
 
-        private static IServiceCollection AddSessionForJwtBearer(
-            this IServiceCollection services)
+        public static IServiceCollection AddSwaggerGenWithOAuth(
+            this IServiceCollection services, IConfiguration configuration)
         {
-            return services.AddSession(options =>
+            var authSection = configuration.GetSection("AuthSettings");
+
+            return services.AddSwaggerGen(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(60);
-                options.Cookie.Name = "JWToken";
-                options.Cookie.IsEssential = true;
+                options.AddSecurityDefinition("oauth2", new()
+                {
+                    Name = "Authorization",
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new()
+                    {
+                        ClientCredentials = new()
+                        {
+                            AuthorizationUrl = new(authSection["Authority"] + "connect/authorize"),
+                            TokenUrl = new(authSection["Authority"] + "connect/token"),
+                            Scopes = new Dictionary<string, string>()
+                            {
+                                [authSection["Audience"]!] = $"{authSection["Audience"]} - full access."
+                            }
+                        }
+                    }
+                });
+
+                options.AddSecurityRequirement(new()
+                {
+                    {
+                        new()
+                        {
+                            Reference = new()
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "oauth2"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
         }
 
