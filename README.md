@@ -22,11 +22,16 @@ CRUD Web API for meetups management (create, update, delete, get/select) using A
 ## Tech stack
 
 - [x] .NET 6
-- [x] Entity Framework Core
 - [x] MS SQL Server
+- [x] Entity Framework Core
+- [x] FluentApi
 - [x] AutoMapper
-- [x] Authentication via bearer token (JWT Bearer)
+- [x] Authentication via IdentityServer4 (JWT Bearer)
 - [x] Swagger
+- [x] xunit
+- [x] FluentAssertions
+- [x] Moq
+- [x] FluentValidation
 
 ## How to work with user?
 

@@ -27,6 +27,8 @@ namespace MeetUpApp.Api.Middleware.Extensions
                 options.AddSecurityDefinition("oauth2", new()
                 {
                     Name = "Authorization",
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.OAuth2,
                     Flows = new()
@@ -37,12 +39,10 @@ namespace MeetUpApp.Api.Middleware.Extensions
                             TokenUrl = new(authSection["Authority"] + "connect/token"),
                             Scopes = new Dictionary<string, string>()
                             {
-                                [authSection["Audience"]!] = authSection["Audience"]!
+                                [authSection["Audience"]!] = $"{authSection["Audience"]} - full access."
                             }
                         }
-                    },
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT"
+                    }
                 });
 
                 options.AddSecurityRequirement(new()

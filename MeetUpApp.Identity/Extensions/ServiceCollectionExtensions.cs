@@ -1,6 +1,5 @@
 ﻿using IdentityServer4.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace MeetUpApp.Identity.Extensions
 {
