@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UsePreconfiguredSerilog(builder.Configuration);
 builder.Services.AddPreconfiguredIdentityServer(builder.Configuration);
+builder.Services.AddCustomCorsPolicy();
 
 var app = builder.Build();
 

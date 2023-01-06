@@ -14,6 +14,7 @@ builder.Services.AddAutoMapper(typeof(MeetupProfile));
 builder.Services.AddControllers();
 builder.Services.AddPreconfiguredFluentValidation();
 builder.Services.AddManagers();
+builder.Services.AddSwaggerGenWithOAuth(builder.Configuration);
 builder.Services.AddJwtBearerAuthentication(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -21,7 +22,7 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionLoggerMiddleware>();
-app.UseSwaggerWithUI(app.Environment);
+app.UseSwaggerWithUI();
 app.UseHttpsRedirection();
 app.UseCookiePolicy();
 app.UseSession();

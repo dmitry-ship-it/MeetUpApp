@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using System.Text;
 
 namespace MeetUpApp.Api.Middleware.Extensions
 {
@@ -11,7 +10,6 @@ namespace MeetUpApp.Api.Middleware.Extensions
         {
             var authSection = configuration.GetRequiredSection("AuthSettings");
 
-            var key = Encoding.Default.GetBytes(authSection["Token"]!);
             var authority = authSection["Authority"];
             var audience = authSection["Audience"];
 

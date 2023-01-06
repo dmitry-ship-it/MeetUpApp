@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using IdentityServer4.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MeetUpApp.Identity.Extensions
 {
@@ -17,6 +19,20 @@ namespace MeetUpApp.Identity.Extensions
                 .AddDeveloperSigningCredential();
 
             return services;
+        }
+
+        public static IServiceCollection AddCustomCorsPolicy(
+            this IServiceCollection services)
+        {
+            return services.AddSingleton<ICorsPolicyService>(provider =>
+            {
+                var logger = provider.GetRequiredService<ILogger<DefaultCorsPolicyService>>();
+
+                return new DefaultCorsPolicyService(logger)
+                {
+                    AllowAll = true
+                };
+            });
         }
     }
 }
