@@ -33,14 +33,7 @@ CRUD Web API for meetups management (create, update, delete, get/select) using A
 - [x] Moq
 - [x] FluentValidation
 
-## How to work with user?
-
-On first start app will create first user:
-
-- username = **admin**
-- password = **Qs3PGVAyyhUXtkRw**
-
-In this app all users are like administrators. _Only logged in user can create, update and delete meetups._ Every guest can read info about every meetup. To create another user you need to be logged in.
+In this app all clients are like administrators. _Only logged in user can create, update and delete meetups._ Every guest can read info about every meetup.
 
 ## To start application you need
 
