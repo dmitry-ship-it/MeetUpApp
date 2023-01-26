@@ -7,7 +7,6 @@ namespace MeetUpApp.Managers.Extensions
         public static IServiceCollection AddManagers(
             this IServiceCollection services)
         {
-            services.AddScoped<UserManager>();
             services.AddScoped<MeetupManager>();
 
             return services;

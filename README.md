@@ -22,11 +22,16 @@ CRUD Web API for meetups management (create, update, delete, get/select) using A
 ## Tech stack
 
 - [x] .NET 6
-- [x] Entity Framework Core
 - [x] MS SQL Server
+- [x] Entity Framework Core
+- [x] FluentApi
 - [x] AutoMapper
-- [x] Authentication via bearer token (JWT Bearer)
+- [x] Authentication via IdentityServer4 (JWT Bearer)
 - [x] Swagger
+- [x] xunit
+- [x] FluentAssertions
+- [x] Moq
+- [x] FluentValidation
 
 ## How to work with user?
 
@@ -75,16 +80,41 @@ cd MeetUpApp.Data
 dotnet ef --startup-project ../MeetUpApp.Api/MeetUpApp.Api.csproj database update
 ```
 
-7. Move to api folder
+7. Move to IdentityServer4 folder
+
+```sh
+cd ../MeetUpApp.Identity
+```
+
+8. Update database for PersistedGrantDbContext of IdentityServer4
+
+```sh
+dotnet ef database update --context PersistedGrantDbContext
+```
+
+9. Update database for ConfigurationDbContext of IdentityServer4
+
+```sh
+dotnet ef database update --context ConfigurationDbContext
+```
+
+10. Start IdentityServer4
+
+```sh
+dotnet run -c Release
+```
+
+11. Move to API folder
 
 ```sh
 cd ../MeetUpApp.Api
 ```
 
-8. Start the application
+12. Start API
 
 ```sh
 dotnet run -c Release
 ```
 
 Now you can navigate to https://localhost:7196/swagger and test it.
+Identity server is available on https://localhost:7216
